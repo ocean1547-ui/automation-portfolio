@@ -1,0 +1,9 @@
+Hi {name},
+
+Just a quick note from {company}'s friends at DemoCo — our spring
+automation workshop is now open for registration.
+
+Reply to this email if you'd like a free 15-minute consultation.
+
+Best regards,
+The DemoCo Team

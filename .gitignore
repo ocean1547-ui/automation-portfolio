@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+price_history.json
+email-sender/config.json

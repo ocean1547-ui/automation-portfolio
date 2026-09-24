@@ -8,6 +8,9 @@ command line, includes sample data, and has an animated demo.
 | [excel-cleaner](excel-cleaner/) | Cleans messy sales spreadsheets: dedupes, fixes dates/prices/casing, prints a report |
 | [price-tracker](price-tracker/) | Monitors a product page and alerts on price drops / target hits |
 | [email-sender](email-sender/) | Sends personalized bulk emails from CSV + template (dry-run by default) |
+| [file-organizer](file-organizer/) | Sorts a messy folder into subfolders by file type |
+| [web-scraper](web-scraper/) | Extracts structured data from any page into CSV via JSON config |
+| [bulk-renamer](bulk-renamer/) | Renames files in bulk with a clean date + sequence pattern |
 
 ## Quick start
 

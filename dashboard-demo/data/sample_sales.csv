@@ -1,0 +1,204 @@
+order_id,date,product,category,quantity,unit_price,region
+ORD-1000,2026-06-13,  wireless mouse ,Electronics,3,29.99,Toronto
+ORD-1001,2026/02/27,Standing Desk,Furniture,5,$299.99,Halifax
+ORD-1002,"Jun 01, 2026",Coffee Maker,Kitchen,1,89.99,Halifax
+ORD-1003,2026-02-25,  standing desk ,Furniture,5,$299.99,Toronto
+ORD-1004,2026/06/16,Electric Kettle,Kitchen,4,39.99,Calgary
+ORD-1005,"Mar 13, 2026",USB-C Hub,Electronics,4,$49.99,Vancouver
+ORD-1006,2026-03-13,  ergonomic chair ,Furniture,3,199.99,Halifax
+ORD-1007,2026/01/24,Coffee Maker,Kitchen,3,$89.99,Vancouver
+ORD-1008,"Jun 04, 2026",Notebook Pack,Office Supplies,4,12.99,Calgary
+ORD-1009,2026-02-01,  coffee maker ,Kitchen,5,$89.99,Vancouver
+ORD-1010,2026/06/10,Pen Set,Office Supplies,1,8.99,Halifax
+ORD-1011,"Jun 19, 2026",Bookshelf,Furniture,1,$129.99,Toronto
+ORD-1012,2026-01-26,  knife set ,Kitchen,4,59.99,
+ORD-1013,2026/04/04,Bookshelf,Furniture,3,$129.99,Toronto
+ORD-1014,"Mar 10, 2026",Bluetooth Speaker,Electronics,2,79.99,Calgary
+ORD-1015,2026-03-04,  monitor arm ,Furniture,4,$69.99,Vancouver
+ORD-1016,2026/06/13,Bookshelf,Furniture,1,129.99,Toronto
+ORD-1017,"Jan 09, 2026",Sticky Notes,Office Supplies,3,$5.99,Halifax
+ORD-1018,2026-02-24,  pen set ,Office Supplies,4,8.99,Montreal
+ORD-1019,2026/06/14,Electric Kettle,Kitchen,3,$39.99,Toronto
+ORD-1020,"Mar 05, 2026",Sticky Notes,Office Supplies,5,5.99,Montreal
+ORD-1021,2026-04-03,  ergonomic chair ,Furniture,5,$199.99,Montreal
+ORD-1022,2026/01/24,Wireless Mouse,Electronics,2,29.99,
+ORD-1023,"Feb 10, 2026",Coffee Maker,Kitchen,4,$89.99,Montreal
+ORD-1024,2026-06-02,  knife set ,Kitchen,5,59.99,Halifax
+ORD-1025,2026/01/30,Desk Organizer,Office Supplies,1,$24.99,Vancouver
+ORD-1026,"Apr 22, 2026",Monitor Arm,Furniture,1,69.99,
+ORD-1027,2026-03-09,  standing desk ,Furniture,3,$299.99,
+ORD-1028,2026/05/10,Ergonomic Chair,Furniture,3,199.99,Toronto
+ORD-1029,"May 19, 2026",Bluetooth Speaker,Electronics,3,$79.99,Montreal
+ORD-1030,2026-01-05,  mechanical keyboard ,Electronics,3,89.99,Toronto
+ORD-1031,2026/01/15,Standing Desk,Furniture,1,$299.99,
+ORD-1032,"May 05, 2026",Bluetooth Speaker,Electronics,2,79.99,Toronto
+ORD-1033,2026-06-18,  electric kettle ,Kitchen,3,$39.99,Calgary
+ORD-1034,2026/06/05,Electric Kettle,Kitchen,5,39.99,
+ORD-1035,"Feb 21, 2026",Sticky Notes,Office Supplies,3,$5.99,Montreal
+ORD-1036,2026-05-13,  coffee maker ,Kitchen,2,89.99,Toronto
+ORD-1037,2026/01/17,Notebook Pack,Office Supplies,5,$12.99,Calgary
+ORD-1038,"Feb 28, 2026",Standing Desk,Furniture,1,299.99,
+ORD-1039,2026-06-11,  usb-c hub ,Electronics,1,$49.99,Halifax
+ORD-1040,2026/03/26,Bluetooth Speaker,Electronics,2,79.99,Vancouver
+ORD-1041,"May 05, 2026",Ergonomic Chair,Furniture,5,$199.99,Calgary
+ORD-1042,2026-05-02,  monitor arm ,Furniture,4,69.99,Toronto
+ORD-1043,2026/01/25,Webcam HD,Electronics,3,$59.99,Montreal
+ORD-1044,"Apr 16, 2026",Coffee Maker,Kitchen,1,89.99,Halifax
+ORD-1045,2026-04-14,  notebook pack ,Office Supplies,2,$12.99,Toronto
+ORD-1046,2026/02/18,Electric Kettle,Kitchen,4,39.99,Toronto
+ORD-1047,"Mar 13, 2026",Electric Kettle,Kitchen,1,$39.99,Montreal
+ORD-1048,2026-05-21,  wireless mouse ,Electronics,5,29.99,Halifax
+ORD-1049,2026/01/24,Ergonomic Chair,Furniture,4,$199.99,Montreal
+ORD-1050,"May 04, 2026",Monitor Arm,Furniture,1,69.99,Toronto
+ORD-1051,2026-04-08,  webcam hd ,Electronics,3,$59.99,Montreal
+ORD-1052,2026/03/15,Blender,Kitchen,2,69.99,Toronto
+ORD-1053,"Mar 17, 2026",Standing Desk,Furniture,5,$299.99,
+ORD-1054,2026-05-19,  mechanical keyboard ,Electronics,1,89.99,Halifax
+ORD-1055,2026/05/30,Electric Kettle,Kitchen,1,$39.99,Calgary
+ORD-1056,"Jan 21, 2026",Standing Desk,Furniture,5,299.99,Halifax
+ORD-1057,2026-03-02,  coffee maker ,Kitchen,5,$89.99,Toronto
+ORD-1058,2026/05/29,Bluetooth Speaker,Electronics,1,79.99,Montreal
+ORD-1059,"Jun 18, 2026",Desk Organizer,Office Supplies,2,$24.99,
+ORD-1060,2026-03-22,  bookshelf ,Furniture,4,129.99,Toronto
+ORD-1061,2026/06/15,Sticky Notes,Office Supplies,3,$5.99,Halifax
+ORD-1062,"Jan 03, 2026",Coffee Maker,Kitchen,1,89.99,Calgary
+ORD-1063,2026-02-24,  pen set ,Office Supplies,3,$8.99,Halifax
+ORD-1064,2026/03/04,Desk Organizer,Office Supplies,2,24.99,Montreal
+ORD-1065,"May 20, 2026",Notebook Pack,Office Supplies,5,$12.99,Vancouver
+ORD-1066,2026-06-19,  usb-c hub ,Electronics,3,49.99,Halifax
+ORD-1067,2026/01/28,Bookshelf,Furniture,3,$129.99,Calgary
+ORD-1068,"Feb 23, 2026",Pen Set,Office Supplies,3,8.99,Calgary
+ORD-1069,2026-05-06,  notebook pack ,Office Supplies,1,$12.99,
+ORD-1070,2026/04/19,Notebook Pack,Office Supplies,1,12.99,Vancouver
+ORD-1071,"Feb 03, 2026",Pen Set,Office Supplies,4,$8.99,Calgary
+ORD-1072,2026-04-20,  wireless mouse ,Electronics,1,29.99,
+ORD-1073,2026/02/08,Mechanical Keyboard,Electronics,5,$89.99,Calgary
+ORD-1074,"Feb 07, 2026",Electric Kettle,Kitchen,1,39.99,Vancouver
+ORD-1075,2026-04-04,  mechanical keyboard ,Electronics,2,$89.99,
+ORD-1076,2026/03/05,Mechanical Keyboard,Electronics,5,89.99,Montreal
+ORD-1077,"Jun 08, 2026",Ergonomic Chair,Furniture,2,$199.99,Toronto
+ORD-1078,2026-04-16,  usb-c hub ,Electronics,3,49.99,Montreal
+ORD-1079,2026/03/05,Pen Set,Office Supplies,1,$8.99,Montreal
+ORD-1080,"Jan 10, 2026",Electric Kettle,Kitchen,2,39.99,Montreal
+ORD-1081,2026-03-31,  pen set ,Office Supplies,2,$8.99,Halifax
+ORD-1082,2026/06/18,Monitor Arm,Furniture,3,69.99,Vancouver
+ORD-1083,"Jan 18, 2026",Desk Organizer,Office Supplies,5,$24.99,Montreal
+ORD-1084,2026-05-18,  notebook pack ,Office Supplies,1,12.99,Vancouver
+ORD-1085,2026/02/15,Notebook Pack,Office Supplies,1,$12.99,Calgary
+ORD-1086,"Apr 22, 2026",Desk Organizer,Office Supplies,4,24.99,Calgary
+ORD-1087,2026-05-11,  webcam hd ,Electronics,5,$59.99,Toronto
+ORD-1088,2026/03/07,Webcam HD,Electronics,1,59.99,Calgary
+ORD-1089,"May 18, 2026",Bookshelf,Furniture,4,$129.99,Halifax
+ORD-1090,2026-06-20,  desk organizer ,Office Supplies,1,24.99,
+ORD-1091,2026/03/18,Sticky Notes,Office Supplies,3,$5.99,Montreal
+ORD-1092,"Mar 17, 2026",Ergonomic Chair,Furniture,4,199.99,
+ORD-1093,2026-04-08,  bookshelf ,Furniture,4,$129.99,Calgary
+ORD-1094,2026/01/01,Desk Organizer,Office Supplies,2,24.99,Montreal
+ORD-1095,"May 29, 2026",Sticky Notes,Office Supplies,4,$5.99,Montreal
+ORD-1096,2026-02-24,  electric kettle ,Kitchen,1,39.99,Vancouver
+ORD-1097,2026/05/12,Notebook Pack,Office Supplies,2,$12.99,
+ORD-1098,"Mar 21, 2026",Ergonomic Chair,Furniture,2,199.99,Halifax
+ORD-1099,2026-01-12,  monitor arm ,Furniture,5,$69.99,Halifax
+ORD-1100,2026/04/27,Electric Kettle,Kitchen,4,39.99,Montreal
+ORD-1101,"Apr 13, 2026",Ergonomic Chair,Furniture,1,$199.99,Halifax
+ORD-1102,2026-04-19,  ergonomic chair ,Furniture,5,199.99,Montreal
+ORD-1103,2026/01/13,Standing Desk,Furniture,4,$299.99,Toronto
+ORD-1104,"Apr 29, 2026",Sticky Notes,Office Supplies,5,5.99,
+ORD-1105,2026-05-10,  blender ,Kitchen,2,$69.99,
+ORD-1106,2026/05/02,Knife Set,Kitchen,2,59.99,
+ORD-1107,"Mar 12, 2026",Electric Kettle,Kitchen,3,$39.99,Montreal
+ORD-1108,2026-01-20,  pen set ,Office Supplies,3,8.99,Vancouver
+ORD-1109,2026/03/23,USB-C Hub,Electronics,2,$49.99,Toronto
+ORD-1110,"Apr 09, 2026",Ergonomic Chair,Furniture,1,199.99,Montreal
+ORD-1111,2026-04-15,  sticky notes ,Office Supplies,4,$5.99,Halifax
+ORD-1112,2026/02/22,Blender,Kitchen,5,69.99,
+ORD-1113,"Jan 06, 2026",Blender,Kitchen,1,$69.99,Vancouver
+ORD-1114,2026-03-18,  blender ,Kitchen,5,69.99,
+ORD-1115,2026/05/20,Monitor Arm,Furniture,2,$69.99,Vancouver
+ORD-1116,"Apr 22, 2026",Coffee Maker,Kitchen,4,89.99,Vancouver
+ORD-1117,2026-04-14,  monitor arm ,Furniture,2,$69.99,Calgary
+ORD-1118,2026/05/17,Webcam HD,Electronics,5,59.99,Calgary
+ORD-1119,"Jun 19, 2026",Wireless Mouse,Electronics,4,$29.99,Toronto
+ORD-1120,2026-04-29,  standing desk ,Furniture,3,299.99,Montreal
+ORD-1121,2026/03/25,Monitor Arm,Furniture,3,$69.99,Vancouver
+ORD-1122,"Apr 08, 2026",Sticky Notes,Office Supplies,3,5.99,Halifax
+ORD-1123,2026-05-01,  bluetooth speaker ,Electronics,1,$79.99,Vancouver
+ORD-1124,2026/02/27,Wireless Mouse,Electronics,1,29.99,Toronto
+ORD-1125,"Feb 21, 2026",Bluetooth Speaker,Electronics,2,$79.99,Toronto
+ORD-1126,2026-02-02,  coffee maker ,Kitchen,5,89.99,Toronto
+ORD-1127,2026/04/30,Desk Organizer,Office Supplies,2,$24.99,Calgary
+ORD-1128,"Jun 05, 2026",USB-C Hub,Electronics,3,49.99,Halifax
+ORD-1129,2026-05-29,  mechanical keyboard ,Electronics,5,$89.99,
+ORD-1130,2026/04/07,Electric Kettle,Kitchen,1,39.99,Calgary
+ORD-1131,"Jun 10, 2026",Standing Desk,Furniture,3,$299.99,
+ORD-1132,2026-06-03,  bluetooth speaker ,Electronics,1,79.99,Vancouver
+ORD-1133,2026/05/17,Knife Set,Kitchen,1,$59.99,Calgary
+ORD-1134,"Jun 15, 2026",Notebook Pack,Office Supplies,4,12.99,Montreal
+ORD-1135,2026-01-28,  knife set ,Kitchen,4,$59.99,
+ORD-1136,2026/02/09,Electric Kettle,Kitchen,5,39.99,
+ORD-1137,"Mar 11, 2026",Blender,Kitchen,4,$69.99,
+ORD-1138,2026-06-01,  desk organizer ,Office Supplies,2,24.99,Halifax
+ORD-1139,2026/03/13,Electric Kettle,Kitchen,4,$39.99,Calgary
+ORD-1140,"Jun 06, 2026",Knife Set,Kitchen,1,59.99,Montreal
+ORD-1141,2026-03-25,  monitor arm ,Furniture,2,$69.99,Vancouver
+ORD-1142,2026/03/08,Desk Organizer,Office Supplies,5,24.99,
+ORD-1143,"Mar 12, 2026",Bluetooth Speaker,Electronics,2,$79.99,Halifax
+ORD-1144,2026-03-03,  blender ,Kitchen,5,69.99,Toronto
+ORD-1145,2026/05/02,Blender,Kitchen,1,$69.99,Halifax
+ORD-1146,"Mar 17, 2026",Monitor Arm,Furniture,2,69.99,Vancouver
+ORD-1147,2026-06-19,  sticky notes ,Office Supplies,5,$5.99,Calgary
+ORD-1148,2026/03/30,Knife Set,Kitchen,3,59.99,
+ORD-1149,"Apr 27, 2026",Desk Organizer,Office Supplies,3,$24.99,Toronto
+ORD-1150,2026-01-31,  bookshelf ,Furniture,1,129.99,
+ORD-1151,2026/05/18,Ergonomic Chair,Furniture,2,$199.99,
+ORD-1152,"May 04, 2026",Desk Organizer,Office Supplies,1,24.99,Toronto
+ORD-1153,2026-03-17,  bookshelf ,Furniture,2,$129.99,Vancouver
+ORD-1154,2026/01/04,Bookshelf,Furniture,1,129.99,Halifax
+ORD-1155,"May 22, 2026",Pen Set,Office Supplies,4,$8.99,Halifax
+ORD-1156,2026-01-04,  sticky notes ,Office Supplies,4,5.99,Montreal
+ORD-1157,2026/03/29,Standing Desk,Furniture,3,$299.99,Montreal
+ORD-1158,"Jan 30, 2026",Webcam HD,Electronics,4,59.99,Halifax
+ORD-1159,2026-05-28,  usb-c hub ,Electronics,2,$49.99,Calgary
+ORD-1160,2026/03/19,USB-C Hub,Electronics,1,49.99,Calgary
+ORD-1161,"Apr 17, 2026",Monitor Arm,Furniture,4,$69.99,Montreal
+ORD-1162,2026-03-18,  knife set ,Kitchen,5,59.99,Calgary
+ORD-1163,2026/01/16,USB-C Hub,Electronics,2,$49.99,Vancouver
+ORD-1164,"Jun 19, 2026",USB-C Hub,Electronics,2,49.99,Toronto
+ORD-1165,2026-05-22,  usb-c hub ,Electronics,1,$49.99,Montreal
+ORD-1166,2026/04/26,Knife Set,Kitchen,1,59.99,Toronto
+ORD-1167,"Mar 15, 2026",Sticky Notes,Office Supplies,1,$5.99,
+ORD-1168,2026-03-01,  pen set ,Office Supplies,4,8.99,Halifax
+ORD-1169,2026/05/20,Ergonomic Chair,Furniture,3,$199.99,Toronto
+ORD-1170,"Jan 19, 2026",USB-C Hub,Electronics,3,49.99,Calgary
+ORD-1171,2026-05-26,  sticky notes ,Office Supplies,1,$5.99,Montreal
+ORD-1172,2026/03/19,Knife Set,Kitchen,5,59.99,Calgary
+ORD-1173,"May 07, 2026",Coffee Maker,Kitchen,5,$89.99,Halifax
+ORD-1174,2026-04-21,  desk organizer ,Office Supplies,1,24.99,Halifax
+ORD-1175,2026/02/28,Mechanical Keyboard,Electronics,5,$89.99,Halifax
+ORD-1176,"Feb 14, 2026",Blender,Kitchen,3,69.99,Toronto
+ORD-1177,2026-05-30,  blender ,Kitchen,1,$69.99,Montreal
+ORD-1178,2026/03/31,Knife Set,Kitchen,3,59.99,
+ORD-1179,"Jan 27, 2026",Bookshelf,Furniture,4,$129.99,
+ORD-1180,2026-05-07,  sticky notes ,Office Supplies,5,5.99,Halifax
+ORD-1181,2026/04/27,Mechanical Keyboard,Electronics,3,$89.99,Vancouver
+ORD-1182,"Jan 30, 2026",Coffee Maker,Kitchen,5,89.99,Montreal
+ORD-1183,2026-04-16,  usb-c hub ,Electronics,5,$49.99,Vancouver
+ORD-1184,2026/06/09,Blender,Kitchen,1,69.99,Toronto
+ORD-1185,"Mar 10, 2026",Bookshelf,Furniture,4,$129.99,
+ORD-1186,2026-05-05,  wireless mouse ,Electronics,5,29.99,Toronto
+ORD-1187,2026/02/10,Notebook Pack,Office Supplies,5,$12.99,Montreal
+ORD-1188,"Jan 24, 2026",Standing Desk,Furniture,4,299.99,Halifax
+ORD-1189,2026-06-15,  monitor arm ,Furniture,3,$69.99,Calgary
+ORD-1190,2026/03/11,Blender,Kitchen,4,69.99,Toronto
+ORD-1191,"Apr 27, 2026",Monitor Arm,Furniture,2,$69.99,Calgary
+ORD-1192,2026-05-11,  standing desk ,Furniture,3,299.99,Montreal
+ORD-1193,2026/03/29,Notebook Pack,Office Supplies,3,$12.99,
+ORD-1194,"Mar 18, 2026",Electric Kettle,Kitchen,4,39.99,Calgary
+ORD-1195,2026-05-04,  desk organizer ,Office Supplies,5,$24.99,Calgary
+ORD-1196,2026/04/07,Knife Set,Kitchen,2,59.99,
+ORD-1197,"Mar 03, 2026",Electric Kettle,Kitchen,4,$39.99,Halifax
+ORD-1198,2026-03-23,  blender ,Kitchen,4,69.99,
+ORD-1199,2026/06/16,Monitor Arm,Furniture,1,$69.99,Toronto
+ORD-1010,2026/06/10,Pen Set,Office Supplies,1,8.99,Halifax
+ORD-1055,2026/05/30,Electric Kettle,Kitchen,1,$39.99,Calgary
+ORD-1120,2026-04-29,  standing desk ,Furniture,3,299.99,Montreal

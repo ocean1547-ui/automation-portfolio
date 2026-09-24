@@ -1,1 +1,7 @@
-{"currency":"CAD","selector":".price","state_file":"price_history.json","target_price":110.0,"url":"file:///home/hatch/workspace/portfolio/price-tracker/demo/product_v1.html"}
+{
+  "currency": "CAD",
+  "selector": ".price",
+  "state_file": "price_history.json",
+  "target_price": 110.0,
+  "url": "file://demo/product_v1.html"
+}

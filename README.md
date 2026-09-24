@@ -1,6 +1,6 @@
 # Automation Portfolio
 
-Three small, real-world Python automation projects. Each one runs from the
+Seven small, real-world Python automation projects. Each one runs from the
 command line, includes sample data, and has an animated demo.
 
 | Project | What it does |
@@ -11,6 +11,7 @@ command line, includes sample data, and has an animated demo.
 | [file-organizer](file-organizer/) | Sorts a messy folder into subfolders by file type |
 | [web-scraper](web-scraper/) | Extracts structured data from any page into CSV via JSON config |
 | [bulk-renamer](bulk-renamer/) | Renames files in bulk with a clean date + sequence pattern |
+| [dashboard-demo](dashboard-demo/) | Builds a self-contained HTML sales dashboard (5 charts, KPI cards) from raw CSV |
 
 ## Quick start
 

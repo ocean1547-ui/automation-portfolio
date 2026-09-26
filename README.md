@@ -3,6 +3,8 @@
 Seven small, real-world Python automation projects. Each one runs from the
 command line, includes sample data, and has an animated demo.
 
+Plus one self-contained HTML demo:
+
 | Project | What it does |
 |---|---|
 | [excel-cleaner](excel-cleaner/) | Cleans messy sales spreadsheets: dedupes, fixes dates/prices/casing, prints a report |
@@ -12,6 +14,7 @@ command line, includes sample data, and has an animated demo.
 | [web-scraper](web-scraper/) | Extracts structured data from any page into CSV via JSON config |
 | [bulk-renamer](bulk-renamer/) | Renames files in bulk with a clean date + sequence pattern |
 | [dashboard-demo](dashboard-demo/) | Builds a self-contained HTML sales dashboard (5 charts, KPI cards) from raw CSV |
+| [ns-mortgage-hub](ns-mortgage-hub/) | Single-file Nova Scotia home-buying app: B-20 stress-test mortgage calculator, DTT, listings, closing checklist |
 
 ## Quick start
 

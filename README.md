@@ -1,5 +1,7 @@
 # Automation Portfolio
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ocean1547-ui/automation-portfolio)
+
 Seven small, real-world Python automation projects. Each one runs from the
 command line, includes sample data, and has an animated demo.
 

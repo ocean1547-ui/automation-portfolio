@@ -15,6 +15,7 @@ Plus one self-contained HTML demo:
 | [bulk-renamer](bulk-renamer/) | Renames files in bulk with a clean date + sequence pattern |
 | [dashboard-demo](dashboard-demo/) | Builds a self-contained HTML sales dashboard (5 charts, KPI cards) from raw CSV |
 | [ns-mortgage-hub](ns-mortgage-hub/) | Single-file Nova Scotia home-buying app: B-20 stress-test mortgage calculator, DTT, listings, closing checklist |
+| [tech-check-1-data-processing](tech-check-1-data-processing/) | Jupyter notebook: pandas data processing from API + CSV sources, matplotlib visualization |
 
 ## Quick start
 

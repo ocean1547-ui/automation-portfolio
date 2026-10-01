@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seungjae Song — Automation Portfolio</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .wrap { max-width: 640px; width: 100%; text-align: center; }
+  h1 { font-size: 2rem; margin-bottom: 8px; }
+  p.sub { color: #94a3b8; margin-bottom: 32px; }
+  .cards { display: grid; gap: 16px; }
+  a.card { display: block; background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; text-decoration: none; color: inherit; transition: transform .15s, border-color .15s; }
+  a.card:hover { transform: translateY(-2px); border-color: #10b981; }
+  a.card h2 { font-size: 1.2rem; color: #10b981; margin-bottom: 6px; }
+  a.card p { color: #94a3b8; font-size: .95rem; }
+  .foot { margin-top: 32px; color: #64748b; font-size: .85rem; }
+  .foot a { color: #10b981; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Automation Portfolio</h1>
+  <p class="sub">Seungjae Song — Python automation, web apps &amp; data projects</p>
+  <div class="cards">
+    <a class="card" href="./ns-mortgage-hub/">
+      <h2>🏠 NS Mortgage Hub</h2>
+      <p>Nova Scotia home-buying app: B-20 stress-test mortgage calculator, deed transfer tax, listings &amp; closing checklist.</p>
+    </a>
+    <a class="card" href="./dashboard-demo/dashboard/">
+      <h2>📊 Sales Dashboard</h2>
+      <p>Self-contained HTML sales dashboard — 5 charts and KPI cards generated from raw CSV.</p>
+    </a>
+    <a class="card" href="https://github.com/ocean1547-ui/automation-portfolio">
+      <h2>💻 All projects on GitHub</h2>
+      <p>CLI automation tools (Excel cleaner, price tracker, bulk email, file organizer, web scraper, bulk renamer) + Jupyter notebook.</p>
+    </a>
+  </div>
+  <p class="foot">Built with Python 3.12 · MIT License</p>
+</div>
+</body>
+</html>

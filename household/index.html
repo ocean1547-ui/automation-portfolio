@@ -11,7 +11,23 @@
 </style>
 </head>
 <body class="text-slate-100 min-h-screen">
-<div class="max-w-md mx-auto px-4 pb-10 pt-6">
+
+<!-- 비밀번호 게이트 -->
+<div id="lock" class="fixed inset-0 z-50 bg-slate-900 flex items-center justify-center px-6">
+  <div class="w-full max-w-xs text-center">
+    <p class="text-4xl mb-3">🔒</p>
+    <h2 class="text-lg font-bold mb-1">우리집 가계부</h2>
+    <p class="text-xs text-slate-400 mb-4">비밀번호를 입력하세요</p>
+    <input id="pw" type="password" inputmode="text" autocomplete="off"
+      class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-center text-lg tracking-widest focus:outline-none focus:border-sky-500"
+      placeholder="••••••••">
+    <button id="pw-btn"
+      class="w-full mt-3 bg-sky-600 hover:bg-sky-500 rounded-xl py-3 font-bold">열기</button>
+    <p id="pw-err" class="text-xs text-red-400 mt-2 h-4"></p>
+  </div>
+</div>
+
+<div id="app" class="max-w-md mx-auto px-4 pb-10 pt-6" style="display:none">
 
   <header class="mb-5">
     <h1 class="text-2xl font-extrabold">🏠 우리집 가계부</h1>
@@ -315,7 +331,33 @@ async function load() {
     </div>`;
   }).join('');
 }
-load();
+
+// --- 비밀번호 게이트 (SHA-256 해시 비교, 세션 유지) ---
+const PW_HASH = '1eea1bc249e5cc50f45a1f73c66056448fc6a0e1a850de297bb9f4cd23b5f15e';
+async function sha256(s) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function unlock() {
+  document.getElementById('lock').style.display = 'none';
+  document.getElementById('app').style.display = '';
+  sessionStorage.setItem('household_auth', '1');
+  load();
+}
+async function tryUnlock() {
+  const v = document.getElementById('pw').value;
+  if (!v) return;
+  const h = await sha256(v);
+  if (h === PW_HASH) { unlock(); }
+  else {
+    document.getElementById('pw-err').textContent = '비밀번호가 틀렸어요';
+    document.getElementById('pw').value = '';
+  }
+}
+document.getElementById('pw-btn').addEventListener('click', tryUnlock);
+document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+if (sessionStorage.getItem('household_auth') === '1') { unlock(); }
+else { document.getElementById('pw').focus(); }
 </script>
 </body>
 </html>

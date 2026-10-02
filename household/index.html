@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Household Ledger</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { background:#0f172a; -webkit-tap-highlight-color: transparent; }
+  .bar { transition: width .6s ease; }
+</style>
+</head>
+<body class="text-slate-100 min-h-screen">
+<div class="max-w-md mx-auto px-4 pb-10 pt-6">
+
+  <header class="mb-5">
+    <h1 class="text-2xl font-extrabold">🏠 Household Ledger</h1>
+    <p class="mt-2"><span class="text-[11px] font-bold text-amber-300 bg-amber-900/40 border border-amber-700/50 rounded-lg px-2 py-1">🧪 Demo — sample data</span></p>
+    <p id="updated" class="text-xs text-slate-400 mt-2"></p>
+  </header>
+
+  <!-- Summary cards: income / expenses / balance -->
+  <div class="grid grid-cols-3 gap-2 mb-6">
+    <div class="bg-slate-800 rounded-2xl p-3 border border-slate-700">
+      <p class="text-[11px] text-slate-400">Monthly income</p>
+      <p id="sum-income" class="text-lg font-extrabold text-emerald-400">-</p>
+      <p id="sum-income-note" class="text-[10px] text-slate-500"></p>
+    </div>
+    <div class="bg-slate-800 rounded-2xl p-3 border border-slate-700">
+      <p class="text-[11px] text-slate-400">Monthly expenses</p>
+      <p id="sum-expense" class="text-lg font-extrabold text-red-400">-</p>
+    </div>
+    <div class="bg-slate-800 rounded-2xl p-3 border border-slate-700">
+      <p class="text-[11px] text-slate-400">Balance</p>
+      <p id="sum-diff" class="text-lg font-extrabold">-</p>
+    </div>
+  </div>
+
+  <!-- Section: income -->
+  <section class="mb-7">
+    <div class="flex items-baseline justify-between mb-2">
+      <h2 class="text-base font-bold">💰 Income</h2>
+      <span id="income-month" class="text-xs text-slate-400"></span>
+    </div>
+    <div class="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden mb-2">
+      <div class="px-4 py-3 bg-slate-900/60 flex items-baseline justify-between">
+        <span class="text-sm text-slate-300">This month's pay total</span>
+        <span id="income-total" class="text-2xl font-extrabold text-emerald-400">-</span>
+      </div>
+      <ul id="income-list" class="divide-y divide-slate-700/60"></ul>
+    </div>
+    <p class="text-[11px] text-slate-500 px-1">Enter the actual amount on each payday. Saved on this device only.</p>
+  </section>
+
+  <!-- Section: fixed expenses -->
+  <section class="mb-7">
+    <div class="flex items-baseline justify-between mb-2">
+      <h2 class="text-base font-bold">📌 Fixed expenses</h2>
+      <span id="fixed-count" class="text-xs text-slate-400"></span>
+    </div>
+    <div class="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
+      <div class="px-4 py-3 bg-slate-900/60 flex items-baseline justify-between">
+        <span class="text-sm text-slate-300">Monthly total</span>
+        <span id="fixed-total" class="text-2xl font-extrabold text-red-400">-</span>
+      </div>
+      <ul id="fixed-list" class="divide-y divide-slate-700/60"></ul>
+    </div>
+  </section>
+
+  <!-- Section: cards -->
+  <section class="mb-7">
+    <div class="flex items-baseline justify-between mb-2">
+      <h2 class="text-base font-bold">💳 Cards</h2>
+      <span class="text-[11px] text-slate-400"><span class="text-red-400">●</span> Balance (spent) <span class="text-emerald-400 ml-1">●</span> Payment</span>
+    </div>
+    <div id="cards-list" class="space-y-2"></div>
+  </section>
+
+  <!-- Section: installment plans -->
+  <section class="mb-7">
+    <div class="flex items-baseline justify-between mb-2">
+      <h2 class="text-base font-bold">📦 Installment plans</h2>
+      <span id="affirm-total" class="text-xs text-slate-400"></span>
+    </div>
+    <div id="affirm-list" class="space-y-2"></div>
+  </section>
+
+  <!-- Section: variable expenses -->
+  <section>
+    <div class="flex items-baseline justify-between mb-2">
+      <h2 class="text-base font-bold">🧾 Variable expenses (receipts)</h2>
+      <span id="var-total" class="text-xs text-slate-400"></span>
+    </div>
+    <ul id="receipt-list" class="space-y-2"></ul>
+  </section>
+
+  <footer class="mt-8 text-center text-[11px] text-slate-500">
+    Edit data.json to update · demo with sample data
+  </footer>
+</div>
+
+<script>
+const fmt = n => '$' + n.toLocaleString('en-CA', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+// --- Income rendering: biweekly paydays + localStorage actuals (works without data.json) ---
+const LS_INCOME_ACTUALS = 'household_income_actuals_demo';
+function getIncomeActuals() {
+  try { return JSON.parse(localStorage.getItem(LS_INCOME_ACTUALS) || '{}'); } catch (e) { return {}; }
+}
+function renderIncome(d) {
+  const FALLBACK = { label: 'Salary', freq: 'biweekly', first_pay: '2026-10-08', estimate: 1600, note: 'Every other Thursday' };
+  const cfg = (d && d.income && d.income[0]) || FALLBACK;
+  const est = cfg.estimate || 1600;
+  const EN_DAY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const parseYMD = s => { const [y, m, dd] = s.split('-').map(Number); return new Date(y, m - 1, dd, 12); };
+  const fmtYMD = dt => dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+
+  // every 14 days from 2026-10-08, 6 months ahead
+  const paydays = [];
+  const horizon = new Date(); horizon.setMonth(horizon.getMonth() + 6);
+  for (let dt = parseYMD(cfg.first_pay || '2026-10-08'); dt <= horizon; dt.setDate(dt.getDate() + 14)) {
+    paydays.push(fmtYMD(dt));
+  }
+  const nowDt = new Date();
+  const curYM = nowDt.getFullYear() + '-' + String(nowDt.getMonth() + 1).padStart(2, '0');
+  const curPaydays = paydays.filter(p => p.slice(0, 7) === curYM);
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('income-month').textContent = MONTHS[nowDt.getMonth()] + ' ' + nowDt.getFullYear();
+
+  const actuals = getIncomeActuals();
+  let sum = 0, hasEst = false;
+  const biweeklyRows = curPaydays.length ? curPaydays.map(p => {
+    const dt = parseYMD(p);
+    const a = actuals[p];
+    const isActual = a != null && !isNaN(a);
+    const amt = isActual ? a : est;
+    if (!isActual) hasEst = true;
+    sum += amt;
+    const dateLabel = (dt.getMonth() + 1) + '/' + dt.getDate() + ' (' + EN_DAY[dt.getDay()] + ')';
+    return `
+    <li class="px-4 py-2.5 flex items-center gap-3">
+      <span class="w-[68px] shrink-0 text-center text-xs font-bold bg-slate-700 rounded-lg py-1">${dateLabel}</span>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm truncate">${cfg.label}</p>
+        ${isActual
+          ? '<span class="text-[10px] font-bold text-emerald-400 bg-emerald-900/50 rounded px-1.5 py-0.5">Confirmed</span>'
+          : '<span class="text-[10px] text-slate-400">~ Est.</span>'}
+      </div>
+      <span class="text-sm font-bold ${isActual ? 'text-emerald-300' : 'text-slate-400'} whitespace-nowrap">${fmt(amt)}</span>
+      <button data-payday="${p}" data-amt="${isActual ? a : ''}" class="income-edit shrink-0 text-[11px] font-bold text-sky-300 bg-sky-900/50 rounded-lg px-2.5 py-1.5">${isActual ? 'Edit' : 'Enter'}</button>
+    </li>`;
+  }).join('') : '';
+
+  // monthly fixed income (e.g. child benefit) — confirmed amount
+  const monthlyIncomes = ((d && d.income) || []).filter(x => x.freq === 'monthly' && x.amount > 0);
+  const monthlyRows = monthlyIncomes.map(m => {
+    sum += m.amount;
+    return `
+    <li class="px-4 py-2.5 flex items-center gap-3">
+      <span class="w-[68px] shrink-0 text-center text-xs font-bold bg-slate-700 rounded-lg py-1">Day ${m.day}</span>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm truncate">${m.label}</p>
+        <span class="text-[10px] font-bold text-emerald-400 bg-emerald-900/50 rounded px-1.5 py-0.5">Confirmed</span>
+      </div>
+      <span class="text-sm font-bold text-emerald-300 whitespace-nowrap">${fmt(m.amount)}</span>
+    </li>`;
+  }).join('');
+
+  const allRows = biweeklyRows + monthlyRows;
+  document.getElementById('income-list').innerHTML = allRows || '<li class="px-4 py-4 text-sm text-slate-500 text-center">No income this month</li>';
+
+  const hasRows = curPaydays.length + monthlyIncomes.length > 0;
+  document.getElementById('income-total').textContent = hasRows ? (hasEst ? '~' : '') + fmt(sum) : '-';
+  document.getElementById('sum-income').textContent = hasRows ? (hasEst ? '~' : '') + fmt(sum) : '-';
+  document.getElementById('sum-income-note').textContent = !hasRows ? '' : (hasEst ? 'Includes estimates' : 'All confirmed');
+
+  document.querySelectorAll('.income-edit').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const p = btn.dataset.payday;
+      const v = prompt('Enter actual take-home pay for ' + p + ' (CAD)', btn.dataset.amt);
+      if (v == null) return;
+      const n = parseFloat(v.replace(/,/g, ''));
+      if (isNaN(n) || n <= 0) { alert('Please enter a valid amount'); return; }
+      const a2 = getIncomeActuals();
+      a2[p] = Math.round(n * 100) / 100;
+      localStorage.setItem(LS_INCOME_ACTUALS, JSON.stringify(a2));
+      load();
+    });
+  });
+  return { incomeMonthlyEst: hasRows ? sum : 0, incomeHasEst: hasEst };
+}
+
+async function load() {
+  let d = null;
+  try {
+    d = await (await fetch('./data.json')).json();
+  } catch (e) { console.error('data.json load failed', e); }
+  // income is localStorage-based, renders even if fetch fails
+  const { incomeMonthlyEst, incomeHasEst } = renderIncome(d);
+  if (!d) {
+    document.body.insertAdjacentHTML('afterbegin',
+      '<div class="max-w-md mx-auto p-6 text-center text-sm text-red-300">Could not load data.json (income shows local data only)</div>');
+    return;
+  }
+  document.getElementById('updated').textContent = 'Updated: ' + (d.meta?.updated || '');
+
+  // --- fixed expenses ---
+  const monthly = d.fixed.filter(x => !x.freq).sort((a, b) => a.day - b.day);
+  const biweekly = d.fixed.filter(x => x.freq === 'biweekly');
+  const monthlySum = monthly.reduce((s, x) => s + x.amount, 0);
+  const biweeklyMonthly = biweekly.reduce((s, x) => s + x.amount * 2, 0); // assume 2x per month
+  const fixedTotal = monthlySum + biweeklyMonthly;
+
+  document.getElementById('fixed-total').textContent = fmt(fixedTotal);
+  document.getElementById('fixed-count').textContent = (monthly.length + biweekly.length) + ' items';
+
+  const list = document.getElementById('fixed-list');
+  list.innerHTML = monthly.map(x => `
+    <li class="px-4 py-2.5 flex items-center gap-3">
+      <span class="w-9 shrink-0 text-center text-xs font-bold bg-slate-700 rounded-lg py-1">${x.day}</span>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm truncate">${x.label}</p>
+        ${x.from ? `<p class="text-[11px] text-slate-400">${x.from}</p>` : ''}
+      </div>
+      <span class="text-sm font-bold text-red-300 whitespace-nowrap">${fmt(x.amount)}</span>
+    </li>`).join('') + biweekly.map(x => `
+    <li class="px-4 py-2.5 flex items-center gap-3 bg-violet-950/30">
+      <span class="w-9 shrink-0 text-center text-[10px] font-bold bg-violet-700 rounded-lg py-1">2×/mo</span>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm truncate">${x.label}</p>
+        <p class="text-[11px] text-slate-400">${x.from}${x.next ? ' · next ' + x.next : ''}</p>
+      </div>
+      <span class="text-sm font-bold text-red-300 whitespace-nowrap">${fmt(x.amount)}</span>
+    </li>`).join('');
+
+  // --- variable expenses (receipts) ---
+  const receipts = d.receipts || [];
+  const vTotal = receipts.reduce((s, x) => s + x.amount, 0);
+  document.getElementById('var-total').textContent = 'Total ' + fmt(vTotal);
+  document.getElementById('receipt-list').innerHTML = receipts.length ? receipts.map(x => `
+    <li class="bg-slate-800 rounded-2xl p-3.5 border border-slate-700">
+      <div class="flex items-baseline justify-between mb-1">
+        <p class="text-sm font-bold">${x.merchant}</p>
+        <p class="text-sm font-extrabold text-red-300">${fmt(x.amount)}</p>
+      </div>
+      <p class="text-[11px] text-slate-400">${x.date}${x.items ? ' · ' + x.items : ''}${x.pay ? ' · ' + x.pay : ''}</p>
+    </li>`).join('')
+    : '<li class="text-sm text-slate-500 text-center py-4">No receipts yet</li>';
+
+  // --- summary: monthly expenses / balance ---
+  const expenseTotal = fixedTotal + vTotal;
+  document.getElementById('sum-expense').textContent = fmt(expenseTotal);
+  const diffEl = document.getElementById('sum-diff');
+  if (incomeMonthlyEst) {
+    const diff = incomeMonthlyEst - expenseTotal;
+    diffEl.textContent = (diff >= 0 ? '+' : '') + fmt(diff).replace('$-', '-$');
+    diffEl.className = 'text-lg font-extrabold ' + (diff >= 0 ? 'text-emerald-400' : 'text-red-400');
+  } else {
+    diffEl.textContent = '-';
+    diffEl.className = 'text-lg font-extrabold text-slate-400';
+  }
+
+  // --- cards ---
+  const cards = d.cards || [];
+  const holders = [...new Set(cards.map(c => c.holder))];
+  const cardList = document.getElementById('cards-list');
+  cardList.innerHTML = holders.map(h => {
+    const hc = cards.filter(c => c.holder === h);
+    const hPay = hc.reduce((s, c) => s + (c.payment || 0), 0);
+    const rows = hc.map(c => {
+      const pct = (c.used != null && c.limit) ? Math.min(100, Math.round(c.used / c.limit * 100)) : null;
+      const usedHtml = c.used != null
+        ? `<span class="text-sm font-bold text-red-300">${fmt(c.used)}</span>`
+        : `<span class="text-[11px] text-amber-300">Check needed</span>`;
+      return `
+      <div class="bg-slate-800 rounded-2xl p-3.5 border border-slate-700">
+        <div class="flex items-baseline justify-between mb-1">
+          <p class="text-sm font-bold">${c.name}</p>
+          <p class="text-[11px] text-slate-400">Limit ${fmt(c.limit)}</p>
+        </div>
+        ${pct != null ? `
+        <div class="h-2 bg-slate-700 rounded-full overflow-hidden mb-2">
+          <div class="bar h-full bg-red-500 rounded-full" style="width:${pct}%"></div>
+        </div>` : ''}
+        <div class="flex items-center justify-between text-[11px]">
+          <span class="text-slate-400"><span class="text-red-400">●</span> Balance (spent) ${usedHtml}</span>
+          <span class="text-slate-400"><span class="text-emerald-400">●</span> Payment <span class="text-sm font-bold text-emerald-300">${fmt(c.payment || 0)}</span></span>
+        </div>
+        ${c.note ? `<p class="text-[10px] text-amber-300/80 mt-1">${c.note}</p>` : ''}
+      </div>`;
+    }).join('');
+    return `
+    <div class="mb-1">
+      <div class="flex items-baseline justify-between mb-2 px-1">
+        <h3 class="text-sm font-bold text-slate-200">👤 ${h} <span class="text-[11px] font-normal text-slate-400">${hc.length} cards</span></h3>
+        <span class="text-[11px] text-slate-400">Monthly payments <span class="text-emerald-300 font-bold">${fmt(hPay)}</span></span>
+      </div>
+      <div class="space-y-2">${rows}</div>
+    </div>`;
+  }).join('');
+
+  // --- installment plans ---
+  const aTotal = d.affirm.reduce((s, x) => s + x.remaining, 0);
+  document.getElementById('affirm-total').textContent = 'Total remaining ' + fmt(aTotal);
+  document.getElementById('affirm-list').innerHTML = d.affirm.map(x => {
+    const pct = Math.round(x.paid / x.total * 100);
+    return `
+    <div class="bg-slate-800 rounded-2xl p-3.5 border border-slate-700">
+      <div class="flex items-baseline justify-between mb-1">
+        <p class="text-sm font-bold">${x.merchant} ${x.autopay ? '<span class="text-[10px] font-normal text-emerald-400 ml-1">AutoPay</span>' : ''}</p>
+        <p class="text-base font-extrabold text-violet-300">${fmt(x.remaining)} <span class="text-[11px] font-normal text-slate-400">left</span></p>
+      </div>
+      <p class="text-[11px] text-slate-400 mb-1.5">${x.paid} of ${x.total} payments</p>
+      <div class="h-2 bg-slate-700 rounded-full overflow-hidden">
+        <div class="bar h-full bg-violet-500 rounded-full" style="width:${pct}%"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+load();
+</script>
+</body>
+</html>

@@ -22,7 +22,7 @@ notebook on pandas data processing.
 | [ns-mortgage-hub](./ns-mortgage-hub/) | Single-file Nova Scotia home-buying app: B-20 stress-test mortgage calculator, DTT, listings, closing checklist |
 | [tech-check-1-data-processing](./tech-check-1-data-processing/) | Jupyter notebook: pandas data processing from API + CSV sources, matplotlib visualization |
 | [moneylog](./moneylog/) | Korean expense tracker web app (React+TS): receipt OCR, calendar view, monthly reports, budgets — KRW/CAD display |
-| [household](./household/) | Simple Korean household dashboard (single HTML): monthly fixed expenses, Affirm installment tracking, receipt log — reads data.json |
+| [household](./household/) | Personal finance dashboard demo (English, sample data): monthly income/expenses, per-card tracking, installment plans, receipts — single HTML reading data.json |
 
 ## Live demos
 
@@ -31,7 +31,7 @@ The two HTML apps run right in the browser — no install needed:
 - [NS Mortgage Hub](https://ocean1547-ui.github.io/automation-portfolio/ns-mortgage-hub/) — B-20 stress-test calculator, NS deed transfer tax, listings, closing checklist
 - [Sales Dashboard demo](https://ocean1547-ui.github.io/automation-portfolio/dashboard-demo/dashboard/) — 5 charts + KPI cards generated from raw CSV
 - [MoneyLog](https://ocean1547-ui.github.io/automation-portfolio/moneylog/) — smart household expense tracker: receipt OCR, calendar, reports, budgets (KRW/CAD)
-- [우리집 가계부](https://ocean1547-ui.github.io/automation-portfolio/household/) — simple fixed-expense + Affirm + receipt dashboard (single HTML, data.json driven)
+- [Household Ledger](https://ocean1547-ui.github.io/automation-portfolio/household/) — personal finance dashboard demo (English, sample data): income/expenses, cards, installments, receipts
 
 ## Quick start
 

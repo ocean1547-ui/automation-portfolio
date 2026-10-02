@@ -279,7 +279,7 @@
       "holder": "효미",
       "name": "캐네디언타이어 마스터",
       "limit": 3000,
-      "used": 60,
+      "used": 2600,
       "payment": 60,
       "note": ""
     },
@@ -287,7 +287,7 @@
       "holder": "승재",
       "name": "캐네디언타이어 마스터",
       "limit": 1000,
-      "used": 60,
+      "used": 995,
       "payment": 40,
       "note": ""
     },
@@ -295,7 +295,7 @@
       "holder": "효미",
       "name": "월마트 마스터",
       "limit": 1500,
-      "used": 100,
+      "used": 1500,
       "payment": 100,
       "note": ""
     },
@@ -303,7 +303,7 @@
       "holder": "승재",
       "name": "코스트코 마스터",
       "limit": 1500,
-      "used": 100,
+      "used": 1450,
       "payment": 100,
       "note": ""
     },
@@ -311,7 +311,7 @@
       "holder": "승재",
       "name": "TD 비자",
       "limit": 1500,
-      "used": 100,
+      "used": 1450,
       "payment": 100,
       "note": ""
     },
@@ -319,7 +319,7 @@
       "holder": "승재",
       "name": "아멕스 포인트",
       "limit": 8800,
-      "used": null,
+      "used": 8750,
       "payment": 200,
       "note": "사용액 확인 필요"
     },
@@ -327,7 +327,7 @@
       "holder": "승재",
       "name": "아멕스 캐쉬백",
       "limit": 3400,
-      "used": null,
+      "used": 3350,
       "payment": 160,
       "note": "사용액 확인 필요"
     },
@@ -335,7 +335,7 @@
       "holder": "승재",
       "name": "캐피탈원 마스터",
       "limit": 4250,
-      "used": null,
+      "used": 4250,
       "payment": 160,
       "note": "사용액 확인 필요"
     },
@@ -343,7 +343,7 @@
       "holder": "효미",
       "name": "캐피탈원 마스터",
       "limit": 5000,
-      "used": null,
+      "used": 5000,
       "payment": 160,
       "note": "사용액 확인 필요"
     },
@@ -351,7 +351,7 @@
       "holder": "효미",
       "name": "PC 마스터",
       "limit": 5000,
-      "used": null,
+      "used": 5000,
       "payment": 160,
       "note": "사용액 확인 필요"
     },
@@ -359,7 +359,7 @@
       "holder": "효미",
       "name": "TD 비자",
       "limit": 9000,
-      "used": null,
+      "used": 8950,
       "payment": 300,
       "note": "사용액 확인 필요"
     }

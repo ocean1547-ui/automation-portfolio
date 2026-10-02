@@ -176,12 +176,6 @@
       "label": "Affirm 잡화"
     },
     {
-      "amount": 1104.94,
-      "day": 20,
-      "from": "",
-      "label": "아동 양육비"
-    },
-    {
       "amount": 95.09,
       "day": 22,
       "from": "Affirm",
@@ -271,6 +265,13 @@
       "first_pay": "2026-10-08",
       "estimate": 1100,
       "note": "격주 목요일, 보통 1,100 (변동)"
+    },
+    {
+      "label": "아동 양육비 (CCB)",
+      "freq": "monthly",
+      "day": 20,
+      "amount": 1104.94,
+      "note": "매달 20일 입금"
     }
   ],
   "cards": [

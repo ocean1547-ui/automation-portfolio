@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Seungjae Song — Digital Card</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>body{background:#0f172a;-webkit-tap-highlight-color:transparent}</style>
+</head>
+<body class="text-slate-100 min-h-screen flex items-center justify-center px-5 py-8">
+<div class="w-full max-w-sm">
+  <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl border border-slate-700 p-7 text-center shadow-2xl">
+    <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-sky-600 flex items-center justify-center text-3xl font-extrabold">S</div>
+    <h1 class="text-2xl font-extrabold">Seungjae Song</h1>
+    <p class="text-sky-300 text-sm font-semibold mt-1">AI Automation Developer</p>
+    <p class="text-slate-400 text-xs mt-1">NSCC · IT Programming for AI</p>
+    <div class="mt-6 space-y-2.5 text-left">
+      <a href="mailto:ocean1547@gmail.com" class="flex items-center gap-3 bg-slate-800/70 rounded-xl px-4 py-3 text-sm">
+        <span>✉️</span><span class="truncate">ocean1547@gmail.com</span>
+      </a>
+      <a href="tel:+19026353585" class="flex items-center gap-3 bg-slate-800/70 rounded-xl px-4 py-3 text-sm">
+        <span>📞</span><span>+1-902-635-3585</span>
+      </a>
+      <a href="https://ocean1547-ui.github.io/automation-portfolio/" class="flex items-center gap-3 bg-slate-800/70 rounded-xl px-4 py-3 text-sm">
+        <span>💼</span><span class="truncate">Portfolio &amp; Live Demos</span>
+      </a>
+      <a href="https://www.linkedin.com/in/seungjae-song-0678bb134" class="flex items-center gap-3 bg-slate-800/70 rounded-xl px-4 py-3 text-sm">
+        <span>🔗</span><span>LinkedIn</span>
+      </a>
+      <a href="https://github.com/ocean1547-ui" class="flex items-center gap-3 bg-slate-800/70 rounded-xl px-4 py-3 text-sm">
+        <span>🐙</span><span class="truncate">github.com/ocean1547-ui</span>
+      </a>
+    </div>
+    <button id="vcard" class="w-full mt-5 bg-sky-600 hover:bg-sky-500 rounded-xl py-3.5 font-bold text-sm">＋ Save Contact</button>
+  </div>
+  <p class="text-center text-[11px] text-slate-500 mt-4">Tap any row to open · Save Contact adds me to your phone</p>
+</div>
+<script>
+document.getElementById('vcard').addEventListener('click', () => {
+  const v = ['BEGIN:VCARD','VERSION:3.0','FN:Seungjae Song','TITLE:AI Automation Developer',
+    'ORG:Nova Scotia Community College','EMAIL:ocean1547@gmail.com','TEL;TYPE=CELL:+1-902-635-3585',
+    'URL:https://ocean1547-ui.github.io/automation-portfolio/',
+    'URL:https://www.linkedin.com/in/seungjae-song-0678bb134','END:VCARD'].join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([v], {type:'text/vcard'}));
+  a.download = 'SeungjaeSong.vcf';
+  a.click();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#03C75A"/>
+      <stop offset="100%" stop-color="#00A243"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f0fdf4"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#00471c" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <!-- Background squircle -->
+  <rect width="512" height="512" rx="128" fill="url(#bg)"/>
+  
+  <!-- Subtle card base -->
+  <g filter="url(#shadow)">
+    <!-- Ledger Book / Wallet Shape -->
+    <rect x="106" y="116" width="300" height="280" rx="36" fill="url(#accent)"/>
+    <!-- Naver style spine accent -->
+    <path d="M106 152 C 106 132, 122 116, 142 116 L 166 116 L 166 396 L 142 396 C 122 396, 106 380, 106 360 Z" fill="#03C75A" fill-opacity="0.18"/>
+    <!-- Horizontal lines representing ledger rows -->
+    <rect x="190" y="180" width="170" height="18" rx="9" fill="#03C75A" fill-opacity="0.85"/>
+    <rect x="190" y="222" width="130" height="14" rx="7" fill="#86efac"/>
+    <rect x="190" y="256" width="150" height="14" rx="7" fill="#86efac"/>
+    <!-- Coin badge -->
+    <circle cx="340" cy="320" r="54" fill="#03C75A"/>
+    <text x="340" y="338" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="52" fill="#ffffff" text-anchor="middle">₩</text>
+  </g>
+</svg>

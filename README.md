@@ -21,6 +21,7 @@ notebook on pandas data processing.
 | [dashboard-demo](./dashboard-demo/) | Builds a self-contained HTML sales dashboard (5 charts, KPI cards) from raw CSV |
 | [ns-mortgage-hub](./ns-mortgage-hub/) | Single-file Nova Scotia home-buying app: B-20 stress-test mortgage calculator, DTT, listings, closing checklist |
 | [tech-check-1-data-processing](./tech-check-1-data-processing/) | Jupyter notebook: pandas data processing from API + CSV sources, matplotlib visualization |
+| [moneylog](./moneylog/) | Korean expense tracker web app (React+TS): receipt OCR, calendar view, monthly reports, budgets — KRW/CAD display |
 
 ## Live demos
 
@@ -28,6 +29,7 @@ The two HTML apps run right in the browser — no install needed:
 
 - [NS Mortgage Hub](https://ocean1547-ui.github.io/automation-portfolio/ns-mortgage-hub/) — B-20 stress-test calculator, NS deed transfer tax, listings, closing checklist
 - [Sales Dashboard demo](https://ocean1547-ui.github.io/automation-portfolio/dashboard-demo/dashboard/) — 5 charts + KPI cards generated from raw CSV
+- [MoneyLog](https://ocean1547-ui.github.io/automation-portfolio/moneylog/) — smart household expense tracker: receipt OCR, calendar, reports, budgets (KRW/CAD)
 
 ## Quick start
 

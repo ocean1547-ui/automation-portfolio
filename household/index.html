@@ -37,8 +37,18 @@
 
   <!-- 섹션: 수입 -->
   <section class="mb-7">
-    <h2 class="text-base font-bold mb-2">💰 수입</h2>
-    <ul id="income-list" class="space-y-2"></ul>
+    <div class="flex items-baseline justify-between mb-2">
+      <h2 class="text-base font-bold">💰 수입</h2>
+      <span id="income-month" class="text-xs text-slate-400"></span>
+    </div>
+    <div class="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden mb-2">
+      <div class="px-4 py-3 bg-slate-900/60 flex items-baseline justify-between">
+        <span class="text-sm text-slate-300">이 달 급여 합계</span>
+        <span id="income-total" class="text-2xl font-extrabold text-emerald-400">-</span>
+      </div>
+      <ul id="income-list" class="divide-y divide-slate-700/60"></ul>
+    </div>
+    <p class="text-[11px] text-slate-500 px-1">입금될 때마다 실제 금액을 입력하세요. 입력한 금액은 이 기기에만 저장됩니다.</p>
   </section>
 
   <!-- 섹션: 고정 지출 -->
@@ -91,47 +101,87 @@
 <script>
 const fmt = n => '$' + n.toLocaleString('en-CA', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
-async function load() {
-  const res = await fetch('./data.json');
-  const d = await res.json();
-  document.getElementById('updated').textContent = '업데이트: ' + (d.meta?.updated || '');
+// --- 수입 렌더링: 격주 급여일 생성 + localStorage 실측 (data.json 없어도 동작) ---
+const LS_INCOME_ACTUALS = 'household_income_actuals';
+function getIncomeActuals() {
+  try { return JSON.parse(localStorage.getItem(LS_INCOME_ACTUALS) || '{}'); } catch (e) { return {}; }
+}
+function renderIncome(d) {
+  const FALLBACK = { label: 'Northwood 급여', freq: 'biweekly', first_pay: '2026-10-08', estimate: 1100, note: '격주 목요일, 보통 1,100 (변동)' };
+  const cfg = (d && d.income && d.income[0]) || FALLBACK;
+  const est = cfg.estimate || 1100;
+  const KO_DAY = ['일', '월', '화', '수', '목', '금', '토'];
+  const parseYMD = s => { const [y, m, dd] = s.split('-').map(Number); return new Date(y, m - 1, dd, 12); };
+  const fmtYMD = dt => dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
 
-  // --- 수입 ---
-  const incomeList = document.getElementById('income-list');
-  let incomeMonthlyEst = 0, incomeEstNote = '';
-  incomeList.innerHTML = (d.income || []).map(x => {
-    let amtHtml, noteHtml = '';
-    if (x.amount != null) {
-      const mult = x.freq === 'biweekly' ? 2 : 1;
-      incomeMonthlyEst += x.amount * mult;
-      amtHtml = `<span class="text-sm font-bold text-emerald-300 whitespace-nowrap">${fmt(x.amount)}${x.freq === 'biweekly' ? ' /2주' : ''}</span>`;
-    } else {
-      // 금액 미확정: note에서 범위 추출 시도 (예: "최근 1,086~1,350")
-      const m = (x.note || '').match(/([\d,]+)~([\d,]+)/);
-      if (m) {
-        const lo = parseFloat(m[1].replace(/,/g, '')), hi = parseFloat(m[2].replace(/,/g, ''));
-        const mid = (lo + hi) / 2, mult = x.freq === 'biweekly' ? 2 : 1;
-        incomeMonthlyEst += mid * mult;
-        incomeEstNote = '추정';
-        amtHtml = `<span class="text-sm font-bold text-emerald-300 whitespace-nowrap">~${fmt(mid)}${x.freq === 'biweekly' ? ' /2주' : ''}</span>`;
-      } else {
-        amtHtml = `<span class="text-xs text-slate-400 whitespace-nowrap">확인 필요</span>`;
-      }
-    }
-    if (x.note) noteHtml = `<p class="text-[11px] text-slate-400">${x.note}${x.next ? ' · 다음 ' + x.next : ''}</p>`;
-    else if (x.next) noteHtml = `<p class="text-[11px] text-slate-400">다음 ${x.next}</p>`;
+  // 2026-10-08부터 14일 간격, 앞으로 6개월치 급여일 생성
+  const paydays = [];
+  const horizon = new Date(); horizon.setMonth(horizon.getMonth() + 6);
+  for (let dt = parseYMD(cfg.first_pay || '2026-10-08'); dt <= horizon; dt.setDate(dt.getDate() + 14)) {
+    paydays.push(fmtYMD(dt));
+  }
+  const nowDt = new Date();
+  const curYM = nowDt.getFullYear() + '-' + String(nowDt.getMonth() + 1).padStart(2, '0');
+  const curPaydays = paydays.filter(p => p.slice(0, 7) === curYM);
+  document.getElementById('income-month').textContent = nowDt.getFullYear() + '년 ' + (nowDt.getMonth() + 1) + '월';
+
+  const actuals = getIncomeActuals();
+  let sum = 0, hasEst = false;
+  document.getElementById('income-list').innerHTML = curPaydays.length ? curPaydays.map(p => {
+    const dt = parseYMD(p);
+    const a = actuals[p];
+    const isActual = a != null && !isNaN(a);
+    const amt = isActual ? a : est;
+    if (!isActual) hasEst = true;
+    sum += amt;
+    const dateLabel = (dt.getMonth() + 1) + '/' + dt.getDate() + ' (' + KO_DAY[dt.getDay()] + ')';
     return `
-    <li class="bg-slate-800 rounded-2xl p-3.5 border border-slate-700 flex items-center gap-3">
-      <span class="w-9 shrink-0 text-center text-[10px] font-bold ${x.freq === 'biweekly' ? 'bg-emerald-700' : 'bg-slate-700'} rounded-lg py-1">${x.freq === 'biweekly' ? '격주' : '월'}</span>
+    <li class="px-4 py-2.5 flex items-center gap-3">
+      <span class="w-[68px] shrink-0 text-center text-xs font-bold bg-slate-700 rounded-lg py-1">${dateLabel}</span>
       <div class="flex-1 min-w-0">
-        <p class="text-sm font-bold truncate">${x.label}</p>
-        ${noteHtml}
+        <p class="text-sm truncate">${cfg.label}</p>
+        ${isActual
+          ? '<span class="text-[10px] font-bold text-emerald-400 bg-emerald-900/50 rounded px-1.5 py-0.5">확정</span>'
+          : '<span class="text-[10px] text-slate-400">~예정</span>'}
       </div>
-      ${amtHtml}
+      <span class="text-sm font-bold ${isActual ? 'text-emerald-300' : 'text-slate-400'} whitespace-nowrap">${fmt(amt)}</span>
+      <button data-payday="${p}" data-amt="${isActual ? a : ''}" class="income-edit shrink-0 text-[11px] font-bold text-sky-300 bg-sky-900/50 rounded-lg px-2.5 py-1.5">${isActual ? '수정' : '입력'}</button>
     </li>`;
-  }).join('') || '<li class="text-sm text-slate-500 text-center py-4">등록된 수입이 없어요</li>';
-  document.getElementById('sum-income').textContent = incomeMonthlyEst ? '~' + fmt(incomeMonthlyEst) : '-';
-  document.getElementById('sum-income-note').textContent = incomeEstNote;
+  }).join('') : '<li class="px-4 py-4 text-sm text-slate-500 text-center">이 달 급여일이 없어요</li>';
+
+  document.getElementById('income-total').textContent = curPaydays.length ? (hasEst ? '~' : '') + fmt(sum) : '-';
+  document.getElementById('sum-income').textContent = curPaydays.length ? (hasEst ? '~' : '') + fmt(sum) : '-';
+  document.getElementById('sum-income-note').textContent = !curPaydays.length ? '' : (hasEst ? '추정 포함' : '전액 확정');
+
+  document.querySelectorAll('.income-edit').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const p = btn.dataset.payday;
+      const v = prompt(p + ' 실수령액을 입력하세요 (CAD)', btn.dataset.amt);
+      if (v == null) return;
+      const n = parseFloat(v.replace(/,/g, ''));
+      if (isNaN(n) || n <= 0) { alert('올바른 금액을 입력하세요'); return; }
+      const a2 = getIncomeActuals();
+      a2[p] = Math.round(n * 100) / 100;
+      localStorage.setItem(LS_INCOME_ACTUALS, JSON.stringify(a2));
+      load();
+    });
+  });
+  return { incomeMonthlyEst: curPaydays.length ? sum : 0, incomeHasEst: hasEst };
+}
+
+async function load() {
+  let d = null;
+  try {
+    d = await (await fetch('./data.json')).json();
+  } catch (e) { console.error('data.json load failed', e); }
+  // 수입은 localStorage 기반이라 fetch 실패해도 렌더링
+  const { incomeMonthlyEst, incomeHasEst } = renderIncome(d);
+  if (!d) {
+    document.body.insertAdjacentHTML('afterbegin',
+      '<div class="max-w-md mx-auto p-6 text-center text-sm text-red-300">data.json을 불러오지 못했어요 (수입은 로컬 데이터로 표시됩니다)</div>');
+    return;
+  }
+  document.getElementById('updated').textContent = '업데이트: ' + (d.meta?.updated || '');
 
   // --- 고정 지출 ---
   const monthly = d.fixed.filter(x => !x.freq).sort((a, b) => a.day - b.day);
@@ -246,11 +296,7 @@ async function load() {
     </div>`;
   }).join('');
 }
-load().catch(e => {
-  document.body.insertAdjacentHTML('afterbegin',
-    '<div class="max-w-md mx-auto p-6 text-center text-sm text-red-300">data.json을 불러오지 못했어요</div>');
-  console.error(e);
-});
+load();
 </script>
 </body>
 </html>

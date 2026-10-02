@@ -267,10 +267,10 @@
   "income": [
     {
       "label": "Northwood 급여",
-      "amount": null,
       "freq": "biweekly",
-      "next": "2026-10-08",
-      "note": "격주 목요일 입금 (최근 1,086~1,350)"
+      "first_pay": "2026-10-08",
+      "estimate": 1100,
+      "note": "격주 목요일, 보통 1,100 (변동)"
     }
   ],
   "cards": [

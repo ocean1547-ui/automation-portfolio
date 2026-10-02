@@ -18,47 +18,63 @@
     <p id="updated" class="text-xs text-slate-400 mt-1"></p>
   </header>
 
-  <!-- 요약 카드 -->
+  <!-- 요약 카드: 수입 / 지출 / 차액 -->
   <div class="grid grid-cols-3 gap-2 mb-6">
     <div class="bg-slate-800 rounded-2xl p-3 border border-slate-700">
-      <p class="text-[11px] text-slate-400">월 고정 합계</p>
-      <p id="sum-fixed" class="text-lg font-extrabold text-emerald-400">-</p>
+      <p class="text-[11px] text-slate-400">월 수입</p>
+      <p id="sum-income" class="text-lg font-extrabold text-emerald-400">-</p>
+      <p id="sum-income-note" class="text-[10px] text-slate-500"></p>
     </div>
     <div class="bg-slate-800 rounded-2xl p-3 border border-slate-700">
-      <p class="text-[11px] text-slate-400">Affirm 잔액</p>
-      <p id="sum-affirm" class="text-lg font-extrabold text-violet-400">-</p>
+      <p class="text-[11px] text-slate-400">월 지출</p>
+      <p id="sum-expense" class="text-lg font-extrabold text-red-400">-</p>
     </div>
     <div class="bg-slate-800 rounded-2xl p-3 border border-slate-700">
-      <p class="text-[11px] text-slate-400">변동 지출</p>
-      <p id="sum-var" class="text-lg font-extrabold text-sky-400">-</p>
+      <p class="text-[11px] text-slate-400">차액</p>
+      <p id="sum-diff" class="text-lg font-extrabold">-</p>
     </div>
   </div>
 
-  <!-- 섹션 1: 고정 지출 -->
+  <!-- 섹션: 수입 -->
+  <section class="mb-7">
+    <h2 class="text-base font-bold mb-2">💰 수입</h2>
+    <ul id="income-list" class="space-y-2"></ul>
+  </section>
+
+  <!-- 섹션: 고정 지출 -->
   <section class="mb-7">
     <div class="flex items-baseline justify-between mb-2">
-      <h2 class="text-base font-bold">📌 이번 달 고정 지출</h2>
+      <h2 class="text-base font-bold">📌 고정 지출</h2>
       <span id="fixed-count" class="text-xs text-slate-400"></span>
     </div>
     <div class="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
       <div class="px-4 py-3 bg-slate-900/60 flex items-baseline justify-between">
         <span class="text-sm text-slate-300">월 합계</span>
-        <span id="fixed-total" class="text-2xl font-extrabold text-emerald-400">-</span>
+        <span id="fixed-total" class="text-2xl font-extrabold text-red-400">-</span>
       </div>
       <ul id="fixed-list" class="divide-y divide-slate-700/60"></ul>
     </div>
   </section>
 
-  <!-- 섹션 2: Affirm -->
+  <!-- 섹션: 카드별 -->
   <section class="mb-7">
     <div class="flex items-baseline justify-between mb-2">
-      <h2 class="text-base font-bold">💳 Affirm 할부</h2>
+      <h2 class="text-base font-bold">💳 카드별</h2>
+      <span class="text-[11px] text-slate-400"><span class="text-red-400">●</span> 사용액(지출) <span class="text-emerald-400 ml-1">●</span> 결제액</span>
+    </div>
+    <div id="cards-list" class="space-y-2"></div>
+  </section>
+
+  <!-- 섹션: Affirm -->
+  <section class="mb-7">
+    <div class="flex items-baseline justify-between mb-2">
+      <h2 class="text-base font-bold">📦 Affirm 할부</h2>
       <span id="affirm-total" class="text-xs text-slate-400"></span>
     </div>
     <div id="affirm-list" class="space-y-2"></div>
   </section>
 
-  <!-- 섹션 3: 변동 지출 -->
+  <!-- 섹션: 변동 지출 -->
   <section>
     <div class="flex items-baseline justify-between mb-2">
       <h2 class="text-base font-bold">🧾 변동 지출 (영수증)</h2>
@@ -80,6 +96,43 @@ async function load() {
   const d = await res.json();
   document.getElementById('updated').textContent = '업데이트: ' + (d.meta?.updated || '');
 
+  // --- 수입 ---
+  const incomeList = document.getElementById('income-list');
+  let incomeMonthlyEst = 0, incomeEstNote = '';
+  incomeList.innerHTML = (d.income || []).map(x => {
+    let amtHtml, noteHtml = '';
+    if (x.amount != null) {
+      const mult = x.freq === 'biweekly' ? 2 : 1;
+      incomeMonthlyEst += x.amount * mult;
+      amtHtml = `<span class="text-sm font-bold text-emerald-300 whitespace-nowrap">${fmt(x.amount)}${x.freq === 'biweekly' ? ' /2주' : ''}</span>`;
+    } else {
+      // 금액 미확정: note에서 범위 추출 시도 (예: "최근 1,086~1,350")
+      const m = (x.note || '').match(/([\d,]+)~([\d,]+)/);
+      if (m) {
+        const lo = parseFloat(m[1].replace(/,/g, '')), hi = parseFloat(m[2].replace(/,/g, ''));
+        const mid = (lo + hi) / 2, mult = x.freq === 'biweekly' ? 2 : 1;
+        incomeMonthlyEst += mid * mult;
+        incomeEstNote = '추정';
+        amtHtml = `<span class="text-sm font-bold text-emerald-300 whitespace-nowrap">~${fmt(mid)}${x.freq === 'biweekly' ? ' /2주' : ''}</span>`;
+      } else {
+        amtHtml = `<span class="text-xs text-slate-400 whitespace-nowrap">확인 필요</span>`;
+      }
+    }
+    if (x.note) noteHtml = `<p class="text-[11px] text-slate-400">${x.note}${x.next ? ' · 다음 ' + x.next : ''}</p>`;
+    else if (x.next) noteHtml = `<p class="text-[11px] text-slate-400">다음 ${x.next}</p>`;
+    return `
+    <li class="bg-slate-800 rounded-2xl p-3.5 border border-slate-700 flex items-center gap-3">
+      <span class="w-9 shrink-0 text-center text-[10px] font-bold ${x.freq === 'biweekly' ? 'bg-emerald-700' : 'bg-slate-700'} rounded-lg py-1">${x.freq === 'biweekly' ? '격주' : '월'}</span>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-bold truncate">${x.label}</p>
+        ${noteHtml}
+      </div>
+      ${amtHtml}
+    </li>`;
+  }).join('') || '<li class="text-sm text-slate-500 text-center py-4">등록된 수입이 없어요</li>';
+  document.getElementById('sum-income').textContent = incomeMonthlyEst ? '~' + fmt(incomeMonthlyEst) : '-';
+  document.getElementById('sum-income-note').textContent = incomeEstNote;
+
   // --- 고정 지출 ---
   const monthly = d.fixed.filter(x => !x.freq).sort((a, b) => a.day - b.day);
   const biweekly = d.fixed.filter(x => x.freq === 'biweekly');
@@ -89,7 +142,6 @@ async function load() {
 
   document.getElementById('fixed-total').textContent = fmt(fixedTotal);
   document.getElementById('fixed-count').textContent = monthly.length + biweekly.length + '건';
-  document.getElementById('sum-fixed').textContent = fmt(fixedTotal);
 
   const list = document.getElementById('fixed-list');
   list.innerHTML = monthly.map(x => `
@@ -99,7 +151,7 @@ async function load() {
         <p class="text-sm truncate">${x.label}</p>
         ${x.from ? `<p class="text-[11px] text-slate-400">${x.from}</p>` : ''}
       </div>
-      <span class="text-sm font-bold whitespace-nowrap">${fmt(x.amount)}</span>
+      <span class="text-sm font-bold text-red-300 whitespace-nowrap">${fmt(x.amount)}</span>
     </li>`).join('') + biweekly.map(x => `
     <li class="px-4 py-2.5 flex items-center gap-3 bg-violet-950/30">
       <span class="w-9 shrink-0 text-center text-[10px] font-bold bg-violet-700 rounded-lg py-1">격주</span>
@@ -107,13 +159,78 @@ async function load() {
         <p class="text-sm truncate">${x.label}</p>
         <p class="text-[11px] text-slate-400">${x.from}${x.next ? ' · 다음 ' + x.next : ''}</p>
       </div>
-      <span class="text-sm font-bold whitespace-nowrap">${fmt(x.amount)}</span>
+      <span class="text-sm font-bold text-red-300 whitespace-nowrap">${fmt(x.amount)}</span>
     </li>`).join('');
+
+  // --- 변동 지출 (영수증) ---
+  const receipts = d.receipts || [];
+  const vTotal = receipts.reduce((s, x) => s + x.amount, 0);
+  document.getElementById('var-total').textContent = '합계 ' + fmt(vTotal);
+  document.getElementById('receipt-list').innerHTML = receipts.length ? receipts.map(x => `
+    <li class="bg-slate-800 rounded-2xl p-3.5 border border-slate-700">
+      <div class="flex items-baseline justify-between mb-1">
+        <p class="text-sm font-bold">${x.merchant}</p>
+        <p class="text-sm font-extrabold text-red-300">${fmt(x.amount)}</p>
+      </div>
+      <p class="text-[11px] text-slate-400">${x.date}${x.items ? ' · ' + x.items : ''}${x.pay ? ' · ' + x.pay : ''}</p>
+    </li>`).join('')
+    : '<li class="text-sm text-slate-500 text-center py-4">아직 등록된 영수증이 없어요</li>';
+
+  // --- 요약: 월 지출 / 차액 ---
+  const expenseTotal = fixedTotal + vTotal;
+  document.getElementById('sum-expense').textContent = fmt(expenseTotal);
+  const diffEl = document.getElementById('sum-diff');
+  if (incomeMonthlyEst) {
+    const diff = incomeMonthlyEst - expenseTotal;
+    diffEl.textContent = (diff >= 0 ? '+' : '') + fmt(diff).replace('$-', '-$');
+    diffEl.className = 'text-lg font-extrabold ' + (diff >= 0 ? 'text-emerald-400' : 'text-red-400');
+  } else {
+    diffEl.textContent = '-';
+    diffEl.className = 'text-lg font-extrabold text-slate-400';
+  }
+
+  // --- 카드별 ---
+  const cards = d.cards || [];
+  const holders = [...new Set(cards.map(c => c.holder))];
+  const cardList = document.getElementById('cards-list');
+  cardList.innerHTML = holders.map(h => {
+    const hc = cards.filter(c => c.holder === h);
+    const hPay = hc.reduce((s, c) => s + (c.payment || 0), 0);
+    const rows = hc.map(c => {
+      const pct = (c.used != null && c.limit) ? Math.min(100, Math.round(c.used / c.limit * 100)) : null;
+      const usedHtml = c.used != null
+        ? `<span class="text-sm font-bold text-red-300">${fmt(c.used)}</span>`
+        : `<span class="text-[11px] text-amber-300">확인 필요</span>`;
+      return `
+      <div class="bg-slate-800 rounded-2xl p-3.5 border border-slate-700">
+        <div class="flex items-baseline justify-between mb-1">
+          <p class="text-sm font-bold">${c.name}</p>
+          <p class="text-[11px] text-slate-400">한도 ${fmt(c.limit)}</p>
+        </div>
+        ${pct != null ? `
+        <div class="h-2 bg-slate-700 rounded-full overflow-hidden mb-2">
+          <div class="bar h-full bg-red-500 rounded-full" style="width:${pct}%"></div>
+        </div>` : ''}
+        <div class="flex items-center justify-between text-[11px]">
+          <span class="text-slate-400"><span class="text-red-400">●</span> 사용액(지출) ${usedHtml}</span>
+          <span class="text-slate-400"><span class="text-emerald-400">●</span> 결제액 <span class="text-sm font-bold text-emerald-300">${fmt(c.payment || 0)}</span></span>
+        </div>
+        ${c.note ? `<p class="text-[10px] text-amber-300/80 mt-1">${c.note}</p>` : ''}
+      </div>`;
+    }).join('');
+    return `
+    <div class="mb-1">
+      <div class="flex items-baseline justify-between mb-2 px-1">
+        <h3 class="text-sm font-bold text-slate-200">👤 ${h} <span class="text-[11px] font-normal text-slate-400">${hc.length}장</span></h3>
+        <span class="text-[11px] text-slate-400">월 결제 합계 <span class="text-emerald-300 font-bold">${fmt(hPay)}</span></span>
+      </div>
+      <div class="space-y-2">${rows}</div>
+    </div>`;
+  }).join('');
 
   // --- Affirm ---
   const aTotal = d.affirm.reduce((s, x) => s + x.remaining, 0);
   document.getElementById('affirm-total').textContent = '총 잔액 ' + fmt(aTotal);
-  document.getElementById('sum-affirm').textContent = fmt(aTotal);
   document.getElementById('affirm-list').innerHTML = d.affirm.map(x => {
     const pct = Math.round(x.paid / x.total * 100);
     return `
@@ -128,20 +245,6 @@ async function load() {
       </div>
     </div>`;
   }).join('');
-
-  // --- 변동 지출 ---
-  const vTotal = d.receipts.reduce((s, x) => s + x.amount, 0);
-  document.getElementById('var-total').textContent = '합계 ' + fmt(vTotal);
-  document.getElementById('sum-var').textContent = fmt(vTotal);
-  document.getElementById('receipt-list').innerHTML = d.receipts.length ? d.receipts.map(x => `
-    <li class="bg-slate-800 rounded-2xl p-3.5 border border-slate-700">
-      <div class="flex items-baseline justify-between mb-1">
-        <p class="text-sm font-bold">${x.merchant}</p>
-        <p class="text-sm font-extrabold text-sky-300">${fmt(x.amount)}</p>
-      </div>
-      <p class="text-[11px] text-slate-400">${x.date}${x.items ? ' · ' + x.items : ''}${x.pay ? ' · ' + x.pay : ''}</p>
-    </li>`).join('')
-    : '<li class="text-sm text-slate-500 text-center py-4">아직 등록된 영수증이 없어요</li>';
 }
 load().catch(e => {
   document.body.insertAdjacentHTML('afterbegin',

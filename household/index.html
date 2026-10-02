@@ -127,7 +127,7 @@ function renderIncome(d) {
 
   const actuals = getIncomeActuals();
   let sum = 0, hasEst = false;
-  document.getElementById('income-list').innerHTML = curPaydays.length ? curPaydays.map(p => {
+  const biweeklyRows = curPaydays.length ? curPaydays.map(p => {
     const dt = parseYMD(p);
     const a = actuals[p];
     const isActual = a != null && !isNaN(a);
@@ -147,11 +147,30 @@ function renderIncome(d) {
       <span class="text-sm font-bold ${isActual ? 'text-emerald-300' : 'text-slate-400'} whitespace-nowrap">${fmt(amt)}</span>
       <button data-payday="${p}" data-amt="${isActual ? a : ''}" class="income-edit shrink-0 text-[11px] font-bold text-sky-300 bg-sky-900/50 rounded-lg px-2.5 py-1.5">${isActual ? '수정' : '입력'}</button>
     </li>`;
-  }).join('') : '<li class="px-4 py-4 text-sm text-slate-500 text-center">이 달 급여일이 없어요</li>';
+  }).join('') : '';
 
-  document.getElementById('income-total').textContent = curPaydays.length ? (hasEst ? '~' : '') + fmt(sum) : '-';
-  document.getElementById('sum-income').textContent = curPaydays.length ? (hasEst ? '~' : '') + fmt(sum) : '-';
-  document.getElementById('sum-income-note').textContent = !curPaydays.length ? '' : (hasEst ? '추정 포함' : '전액 확정');
+  // 월 고정 수입 (예: 아동 양육비 CCB) — 확정 금액
+  const monthlyIncomes = ((d && d.income) || []).filter(x => x.freq === 'monthly' && x.amount > 0);
+  const monthlyRows = monthlyIncomes.map(m => {
+    sum += m.amount;
+    return `
+    <li class="px-4 py-2.5 flex items-center gap-3">
+      <span class="w-[68px] shrink-0 text-center text-xs font-bold bg-slate-700 rounded-lg py-1">매달 ${m.day}일</span>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm truncate">${m.label}</p>
+        <span class="text-[10px] font-bold text-emerald-400 bg-emerald-900/50 rounded px-1.5 py-0.5">확정</span>
+      </div>
+      <span class="text-sm font-bold text-emerald-300 whitespace-nowrap">${fmt(m.amount)}</span>
+    </li>`;
+  }).join('');
+
+  const allRows = biweeklyRows + monthlyRows;
+  document.getElementById('income-list').innerHTML = allRows || '<li class="px-4 py-4 text-sm text-slate-500 text-center">이 달 수입이 없어요</li>';
+
+  const hasRows = curPaydays.length + monthlyIncomes.length > 0;
+  document.getElementById('income-total').textContent = hasRows ? (hasEst ? '~' : '') + fmt(sum) : '-';
+  document.getElementById('sum-income').textContent = hasRows ? (hasEst ? '~' : '') + fmt(sum) : '-';
+  document.getElementById('sum-income-note').textContent = !hasRows ? '' : (hasEst ? '추정 포함' : '전액 확정');
 
   document.querySelectorAll('.income-edit').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -166,7 +185,7 @@ function renderIncome(d) {
       load();
     });
   });
-  return { incomeMonthlyEst: curPaydays.length ? sum : 0, incomeHasEst: hasEst };
+  return { incomeMonthlyEst: hasRows ? sum : 0, incomeHasEst: hasEst };
 }
 
 async function load() {

@@ -24,7 +24,7 @@ notebook on pandas data processing.
 | [moneylog](./moneylog/) | Korean expense tracker web app (React+TS): receipt OCR, calendar view, monthly reports, budgets — KRW/CAD display |
 | [household](./household/) | Personal finance dashboard demo (English, sample data): monthly income/expenses, per-card tracking, installment plans, receipts — single HTML reading data.json |
 | [agent-skills](./agent-skills/) | Agent Skills demo (Korean): what SKILL.md packs are, google-gemini/gemini-skills library picks, my own shorts-pipeline skill with full SKILL.md |
-| [tech-check-1-practice](./tech-check-1-practice/) | Practice notebook mirroring the Tech Check 1 exam format (CSV + API sources) |
+| [tech-check-1-practice](./tech-check-1-practice/) | Practice notebook mirroring the Tech Check 1 exam format (product-revenue CSV + todos API) |
 
 ## Live demos
 

@@ -200,6 +200,47 @@ data = [[cell.text.strip() for cell in row.find_all(['th', 'td'])]
 df_web = pd.DataFrame(data[1:], columns=data[0])
 ```
 
+I. Selenium 스크래핑 - 동적 콘텐츠용 (Exercise 8)
+```python
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import pandas as pd
+import time
+
+driver = webdriver.Chrome()
+driver.get("https://웹사이트주소.com")
+time.sleep(3)  # 자바스크립트 로딩 대기
+
+# 표의 모든 행 가져오기
+rows = driver.find_elements(By.TAG_NAME, "tr")
+data = [[cell.text for cell in row.find_elements(By.TAG_NAME, "td")]
+        for row in rows if row.find_elements(By.TAG_NAME, "td")]
+
+df_web = pd.DataFrame(data)
+driver.quit()  # 브라우저 종료 (필수!)
+```
+
+J. 바이너리 / 이미지 파일 읽기 (Exercise 5)
+```python
+import pandas as pd
+from PIL import Image
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 1. 바이너리 데이터 파일 읽기 (예: IBM.data)
+df = pd.read_csv('IBM.data', header=None)
+
+# 2. 이미지 파일을 NumPy 배열로 읽기
+img = Image.open('이미지파일.png')
+img_array = np.array(img)
+print(img_array.shape)  # (높이, 너비, 색상채널)
+
+# 3. 이미지 화면에 출력
+plt.imshow(img_array)
+plt.axis('off')  # 축 눈금 숨기기
+plt.show()
+```
+
 ## 6. 🔗 pandas ↔ PostgreSQL 연동
 DB 데이터를 바로 DataFrame으로 가져오거나, DataFrame을 DB 테이블로 저장합니다.
 ```python

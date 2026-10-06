@@ -13,7 +13,26 @@ git commit -m "작업 내용 설명 적기"
 git push
 ```
 
-## 2. 🐘 PostgreSQL 터미널 명령어
+## 2. ✍️ Markdown 기초 (Exercise 1)
+노트북 설명 셀과 README 작성용 문법입니다.
+```markdown
+# 큰 제목
+## 중간 제목
+### 작은 제목
+
+**굵게** / *기울임* / `인라인 코드`
+
+- 순서 없는 목록
+- 항목 2
+
+1. 순서 있는 목록
+2. 항목 2
+
+[링크 텍스트](https://주소.com)
+![이미지 설명](이미지파일.png)
+```
+
+## 3. 🐘 PostgreSQL 터미널 명령어
 Codespaces 터미널에서 데이터베이스에 접속하고 확인할 때 사용합니다
 ```bash
 # DB 접속 (비밀번호 입력창이 뜨면 타이핑 후 엔터 - 화면에 안 보여도 입력되고 있음)
@@ -26,9 +45,11 @@ psql -d postgres -h localhost -U postgres
 \q
 ```
 
-## 3. 🗄️ SQL 기초 쿼리
+## 4. 🗄️ SQL 기초 쿼리
 psql 접속 후(`postgres=#`) 바로 입력합니다. 세미콜론(;) 필수!
 (예시 테이블: `countries` / 컬럼: `country`(국가명), `gdp`(GDP), `continent`(대륙))
+
+### 조회 (DML)
 ```sql
 -- 전체 조회
 SELECT * FROM countries;
@@ -56,8 +77,32 @@ FROM countries
 JOIN population ON countries.country = population.country;
 ```
 
-## 4. 🐼 Pandas: 데이터 불러오기 (CSV & API)
-파일 데이터 (CSV)
+### 테이블 만들기·고치기·지우기 (DDL, Exercise 9·10)
+```sql
+-- 기존 테이블이 있으면 먼저 삭제 (스크립트 반복 실행용)
+DROP TABLE Persons;
+
+-- 테이블 만들기
+CREATE TABLE Persons (
+    ID        SERIAL    PRIMARY KEY NOT NULL,
+    LastName  CHAR(32)  NOT NULL,
+    FirstName CHAR(32)
+);
+
+-- 데이터 넣기
+INSERT INTO Persons (LastName, FirstName)
+VALUES ('Jones', 'Tom');
+
+-- 테이블 구조 변경 (컬럼 추가)
+ALTER TABLE Persons ADD COLUMN Age INT;
+
+-- 조회 확인
+SELECT * FROM Persons;
+```
+
+## 5. 🐼 Pandas: 데이터 불러오기 (CSV & API)
+
+A. 파일 데이터 (CSV)
 ```python
 import pandas as pd
 
@@ -69,8 +114,6 @@ df = pd.read_csv('파일명.csv', encoding='cp949') # 한글 윈도우용
 # 또는
 df = pd.read_csv('파일명.csv', encoding='latin1') # 영문/기타
 ```
-
-웹 데이터 (API / JSON)
 
 B. API (JSON) 데이터 읽기
 ```python
@@ -93,14 +136,79 @@ tables = pd.read_html(url)
 df_web = tables[0]
 ```
 
-## 5. 🔗 pandas ↔ PostgreSQL 연동
+D. 파이썬 2차원 배열 → DataFrame (Exercise 2)
+```python
+import pandas as pd
+
+data = [['홍길동', 25, '서울'],
+        ['김철수', 30, '부산']]
+df = pd.DataFrame(data, columns=['이름', '나이', '도시'])
+```
+
+E. 고정폭 플랫 파일 읽기 (Exercise 4)
+```python
+import pandas as pd
+
+# 컬럼 너비가 고정된 텍스트 파일 읽기
+df = pd.read_fwf('파일명.txt')
+```
+
+F. XML / JSON 파일 읽기 (Exercise 6)
+```python
+import pandas as pd
+
+# XML 파일 읽기
+df_xml = pd.read_xml('파일명.xml')
+
+# JSON 파일 읽기
+df_json = pd.read_json('파일명.json')
+```
+
+G. API 페이징 처리 (Exercise 7)
+```python
+import pandas as pd
+import requests
+
+all_data = []
+page = 1
+while True:
+    url = f"https://api.domain.com/data?page={page}&per_page=200"
+    data = requests.get(url).json()
+    if not data:  # 더 이상 데이터가 없으면 종료
+        break
+    all_data.extend(data)
+    page += 1
+
+df_api = pd.DataFrame(all_data)
+```
+
+H. BeautifulSoup 스크래핑 (Exercise 8)
+```python
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+
+response = requests.get("https://웹사이트주소.com")
+soup = BeautifulSoup(response.text, 'html.parser')
+
+# 표의 모든 행(<tr>)을 가져와 셀 텍스트 추출
+rows = soup.find_all('tr')
+data = [[cell.text.strip() for cell in row.find_all(['th', 'td'])]
+        for row in rows]
+
+# 첫 행을 컬럼명으로 DataFrame 생성
+df_web = pd.DataFrame(data[1:], columns=data[0])
+```
+
+## 6. 🔗 pandas ↔ PostgreSQL 연동
 DB 데이터를 바로 DataFrame으로 가져오거나, DataFrame을 DB 테이블로 저장합니다.
 ```python
 import pandas as pd
 from sqlalchemy import create_engine
 
-# DB 연결 엔진 만들기 (비밀번호 부분만 본인 것으로 교체)
-engine = create_engine('postgresql://postgres:비밀번호@localhost:5432/postgres')
+# DB 연결 엔진 만들기
+# Codespaces 기본값: 사용자 postgres / 비밀번호 postgres / DB postgres
+engine = create_engine('postgresql://postgres:postgres@localhost:5432/postgres')
 
 # SQL 쿼리 결과를 바로 DataFrame으로 읽기
 df = pd.read_sql("SELECT * FROM 테이블명", engine)
@@ -110,7 +218,7 @@ df.to_sql('테이블명', engine, if_exists='replace', index=False)
 # if_exists 옵션: 'replace'(덮어쓰기), 'append'(이어붙이기)
 ```
 
-## 6. 🔍 Pandas: 데이터 탐색 및 통계 (EDA)
+## 7. 🔍 Pandas: 데이터 탐색 및 통계 (EDA)
 데이터가 잘 들어왔는지 검사할 때 무조건 쓰는 4가지 필수 코드입니다.
 ```python
 # 1. 위에서부터 5줄 미리보기
@@ -133,7 +241,7 @@ GDP나 금액 등 큰 숫자가 1.23e+09처럼 보일 때, 라이브러리 불�
 pd.options.display.float_format = '{:,.2f}'.format
 ```
 
-## 7. 📊 완벽한 시각화 (Matplotlib)
+## 8. 📊 완벽한 시각화 (Matplotlib)
 과학적 표기법(1.23e+09)을 달러 표시로 바꾸는 옵션과, 글자 겹침을 방지하는 정밀한 그래프 템플릿입니다.
 ```python
 import matplotlib.pyplot as plt
@@ -158,7 +266,7 @@ plt.tight_layout()      # 그래프 여백 자동 최적화
 plt.show()              # 화면에 출력
 ```
 
-## 8. 🧹 데이터 정제 및 조작 (Pandas 핵심 연산)
+## 9. 🧹 데이터 정제 및 조작 (Pandas 핵심 연산)
 데이터를 가져온 후 원하는 입맛대로 요리하는 코드입니다.
 
 기초 통계 연산 (Cat Facts 실습 활용)

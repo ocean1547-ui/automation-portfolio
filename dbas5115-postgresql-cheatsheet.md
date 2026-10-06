@@ -28,31 +28,32 @@ psql -d postgres -h localhost -U postgres
 
 ## 3. 🗄️ SQL 기초 쿼리
 psql 접속 후(`postgres=#`) 바로 입력합니다. 세미콜론(;) 필수!
+(예시 테이블: `countries` / 컬럼: `country`(국가명), `gdp`(GDP), `continent`(대륙))
 ```sql
 -- 전체 조회
-SELECT * FROM 테이블명;
+SELECT * FROM countries;
 
 -- 원하는 컬럼만 조회
-SELECT 컬럼1, 컬럼2 FROM 테이블명;
+SELECT country, gdp FROM countries;
 
--- 조건으로 행 필터링
-SELECT * FROM 테이블명 WHERE 조건;
+-- 조건으로 행 필터링 (GDP 1조 달러 이상 국가만)
+SELECT * FROM countries WHERE gdp > 1000000000000;
 
 -- 정렬 (DESC: 내림차순 / ASC: 오름차순)
-SELECT * FROM 테이블명 ORDER BY 컬럼명 DESC;
+SELECT * FROM countries ORDER BY gdp DESC;
 
--- 상위 N개만 가져오기
-SELECT * FROM 테이블명 ORDER BY 컬럼명 DESC LIMIT 5;
+-- 상위 5개만 가져오기
+SELECT * FROM countries ORDER BY gdp DESC LIMIT 5;
 
--- 그룹별 집계 (예: 국가별 평균 GDP)
-SELECT 컬럼명, COUNT(*), AVG(숫자컬럼)
-FROM 테이블명
-GROUP BY 컬럼명;
+-- 그룹별 집계 (대륙별 국가 수, 평균 GDP)
+SELECT continent, COUNT(*), AVG(gdp)
+FROM countries
+GROUP BY continent;
 
--- 두 테이블 합치기 (공통 컬럼 기준)
+-- 두 테이블 합치기 (국가명 기준)
 SELECT *
-FROM 테이블A
-JOIN 테이블B ON 테이블A.공통컬럼 = 테이블B.공통컬럼;
+FROM countries
+JOIN population ON countries.country = population.country;
 ```
 
 ## 4. 🐼 Pandas: 데이터 불러오기 (CSV & API)

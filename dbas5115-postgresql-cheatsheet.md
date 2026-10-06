@@ -26,7 +26,36 @@ psql -d postgres -h localhost -U postgres
 \q
 ```
 
-## 3. 🐼 Pandas: 데이터 불러오기 (CSV & API)
+## 3. 🗄️ SQL 기초 쿼리
+psql 접속 후(`postgres=#`) 바로 입력합니다. 세미콜론(;) 필수!
+```sql
+-- 전체 조회
+SELECT * FROM 테이블명;
+
+-- 원하는 컬럼만 조회
+SELECT 컬럼1, 컬럼2 FROM 테이블명;
+
+-- 조건으로 행 필터링
+SELECT * FROM 테이블명 WHERE 조건;
+
+-- 정렬 (DESC: 내림차순 / ASC: 오름차순)
+SELECT * FROM 테이블명 ORDER BY 컬럼명 DESC;
+
+-- 상위 N개만 가져오기
+SELECT * FROM 테이블명 ORDER BY 컬럼명 DESC LIMIT 5;
+
+-- 그룹별 집계 (예: 국가별 평균 GDP)
+SELECT 컬럼명, COUNT(*), AVG(숫자컬럼)
+FROM 테이블명
+GROUP BY 컬럼명;
+
+-- 두 테이블 합치기 (공통 컬럼 기준)
+SELECT *
+FROM 테이블A
+JOIN 테이블B ON 테이블A.공통컬럼 = 테이블B.공통컬럼;
+```
+
+## 4. 🐼 Pandas: 데이터 불러오기 (CSV & API)
 파일 데이터 (CSV)
 ```python
 import pandas as pd
@@ -63,7 +92,24 @@ tables = pd.read_html(url)
 df_web = tables[0]
 ```
 
-## 4. 🔍 Pandas: 데이터 탐색 및 통계 (EDA)
+## 5. 🔗 pandas ↔ PostgreSQL 연동
+DB 데이터를 바로 DataFrame으로 가져오거나, DataFrame을 DB 테이블로 저장합니다.
+```python
+import pandas as pd
+from sqlalchemy import create_engine
+
+# DB 연결 엔진 만들기 (비밀번호 부분만 본인 것으로 교체)
+engine = create_engine('postgresql://postgres:비밀번호@localhost:5432/postgres')
+
+# SQL 쿼리 결과를 바로 DataFrame으로 읽기
+df = pd.read_sql("SELECT * FROM 테이블명", engine)
+
+# DataFrame을 DB 테이블로 저장
+df.to_sql('테이블명', engine, if_exists='replace', index=False)
+# if_exists 옵션: 'replace'(덮어쓰기), 'append'(이어붙이기)
+```
+
+## 6. 🔍 Pandas: 데이터 탐색 및 통계 (EDA)
 데이터가 잘 들어왔는지 검사할 때 무조건 쓰는 4가지 필수 코드입니다.
 ```python
 # 1. 위에서부터 5줄 미리보기
@@ -86,7 +132,7 @@ GDP나 금액 등 큰 숫자가 1.23e+09처럼 보일 때, 라이브러리 불�
 pd.options.display.float_format = '{:,.2f}'.format
 ```
 
-## 5. 📊 완벽한 시각화 (Matplotlib)
+## 7. 📊 완벽한 시각화 (Matplotlib)
 과학적 표기법(1.23e+09)을 달러 표시로 바꾸는 옵션과, 글자 겹침을 방지하는 정밀한 그래프 템플릿입니다.
 ```python
 import matplotlib.pyplot as plt
@@ -111,7 +157,7 @@ plt.tight_layout()      # 그래프 여백 자동 최적화
 plt.show()              # 화면에 출력
 ```
 
-## 6. 🔍 데이터 정제 및 조작 (Pandas 핵심 연산)
+## 8. 🧹 데이터 정제 및 조작 (Pandas 핵심 연산)
 데이터를 가져온 후 원하는 입맛대로 요리하는 코드입니다.
 
 기초 통계 연산 (Cat Facts 실습 활용)
@@ -134,4 +180,25 @@ df_sorted = df_csv.sort_values(by='2025', ascending=False)
 
 # 위에서부터 5개만 짤라내기 (Top 5)
 top_5 = df_sorted.head(5)
+```
+
+결측치 처리
+```python
+# 컬럼별 결측치(빈칸) 개수 확인
+df.isnull().sum()
+
+# 결측치가 있는 행 삭제
+df_clean = df.dropna()
+
+# 결측치를 특정 값으로 채우기
+df_filled = df.fillna(0)
+```
+
+그룹별 집계 (groupby)
+```python
+# 그룹별 평균 (예: 국가별 GDP 평균)
+df.groupby('컬럼명')['숫자컬럼'].mean()
+
+# 여러 집계를 한 번에 (평균, 최대, 최소, 개수)
+df.groupby('컬럼명')['숫자컬럼'].agg(['mean', 'max', 'min', 'count'])
 ```

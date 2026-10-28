@@ -4,11 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>James Song — Digital Business Card</title>
-<meta name="description" content="James Song · AI Automation Developer in Halifax, Nova Scotia. Tap to call, email, watch a short intro in my own voice, view my resume, or send me a file.">
+<meta name="description" content="James Song · AI Automation Developer in Halifax, Nova Scotia. Tap to call, email, watch a short intro in my own voice, view my resume, or send me a file phone-to-phone.">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   body{background:#f1f5f9;-webkit-tap-highlight-color:transparent}
   .card-link:active{transform:scale(.985)}
+  #qrBox table{margin:0 auto;border-collapse:collapse}
+  #qrBox td{padding:0;line-height:0}
 </style>
 </head>
 <body class="text-slate-800 min-h-screen">
@@ -81,27 +83,159 @@
       </a>
     </div>
 
-    <!-- Send files -->
-    <p class="text-xs font-extrabold tracking-widest text-slate-500 mt-8 mb-2">SEND ME A FILE</p>
-    <div class="space-y-2.5">
-      <a href="https://script.google.com/macros/s/AKfycbxxPHmq5muuy-ASxsSp6UIuoz45RcUfBod-18fweP24nfji8KKQkMqFFkgC88Q3JKAIbA/exec" class="card-link flex items-center gap-3 bg-white rounded-2xl px-4 py-3.5 text-sm font-semibold shadow border-l-4 border-emerald-500 transition">
-        <span class="text-lg">📤</span><span class="flex-1">Send Files — no login needed</span><span class="text-slate-300">›</span>
-      </a>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeaW-28KsJn_av61GCoZjMf9X4o3tgRGFg-cEF_UYaut-p7Hw/viewform?hl=en" class="card-link flex items-center gap-3 bg-white rounded-2xl px-4 py-3.5 text-sm font-semibold shadow border-l-4 border-emerald-500 transition">
-        <span class="text-lg">📝</span><span class="flex-1">Send Files — Google Form</span><span class="text-slate-300">›</span>
-      </a>
-    </div>
+    <!-- Phone-to-phone file transfer -->
+    <p class="text-xs font-extrabold tracking-widest text-slate-500 mt-8 mb-2">SEND ME A FILE — PHONE TO PHONE</p>
+    <div class="bg-white rounded-2xl shadow border-l-4 border-emerald-500 px-4 py-4">
+      <p class="text-sm text-slate-600 leading-relaxed">Send a file straight from your phone to James's phone. No account, no upload server — the file travels directly between the two phones.</p>
 
-    <!-- Gallery -->
-    <p class="text-xs font-extrabold tracking-widest text-slate-500 mt-8 mb-2">GALLERY</p>
-    <div class="grid grid-cols-3 gap-2">
-      <img src="photo.jpg" alt="James Song in a suit" class="w-full h-28 object-cover rounded-xl shadow">
-      <img src="gallery-office.jpg" alt="James Song at the office" class="w-full h-28 object-cover rounded-xl shadow">
-      <img src="cover.jpg" alt="Halifax harbour" class="w-full h-28 object-cover rounded-xl shadow">
+      <!-- Sender view -->
+      <div id="sendBox">
+        <button id="startBtn" class="w-full mt-3 bg-emerald-600 text-white text-sm font-bold rounded-xl py-3 shadow">📲 Start phone-to-phone transfer</button>
+        <div id="sendPanel" class="hidden mt-4 text-center">
+          <p class="text-sm font-semibold text-slate-700">Ask James to scan this with his phone:</p>
+          <div id="qrBox" class="mt-3 inline-block bg-white p-2 rounded-lg border border-slate-200"></div>
+          <p class="text-xs text-slate-500 mt-2">…or tell him this code: <span id="codeTxt" class="font-extrabold text-slate-800 tracking-widest"></span></p>
+          <p id="sendStatus" class="text-sm mt-3 text-slate-500">Waiting for James to connect…</p>
+          <div id="pickRow" class="hidden mt-3">
+            <label class="block w-full bg-sky-600 text-white text-sm font-bold rounded-xl py-3 shadow cursor-pointer">
+              📎 Choose file &amp; send
+              <input id="fileInput" type="file" class="hidden">
+            </label>
+            <p id="progTxt" class="text-xs text-slate-500 mt-2"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Receiver view (opened via QR / code link) -->
+      <div id="recvBox" class="hidden text-center">
+        <p class="text-sm font-semibold text-slate-700">📥 Receiving mode</p>
+        <p id="recvStatus" class="text-sm mt-2 text-slate-500">Connecting…</p>
+        <p id="recvProg" class="text-xs text-slate-500 mt-1"></p>
+      </div>
+
+      <!-- Manual code entry (James side, if QR scan is awkward) -->
+      <div id="codeRow" class="mt-4 flex gap-2">
+        <input id="codeInput" type="text" inputmode="numeric" placeholder="Enter code from their phone" class="flex-1 min-w-0 border border-slate-300 rounded-xl px-3 py-2.5 text-sm">
+        <button id="joinBtn" class="bg-slate-900 text-white text-sm font-bold rounded-xl px-4 py-2.5">Receive</button>
+      </div>
+
+      <p class="text-[11px] text-slate-400 mt-3">Both phones need this page open at the same time. Not together? Use the <a class="underline" href="https://script.google.com/macros/s/AKfycbxxPHmq5muuy-ASxsSp6UIuoz45RcUfBod-18fweP24nfji8KKQkMqFFkgC88Q3JKAIbA/exec">backup upload page</a> instead.</p>
     </div>
 
     <p class="text-center text-[11px] text-slate-400 mt-8">+1-902-635-3585 · ocean1547@gmail.com<br>Tap 📇 Save to add me to your contacts</p>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script>
+(function(){
+  var PREFIX = 'jamescard-';
+  var $ = function(id){ return document.getElementById(id); };
+  var params = new URLSearchParams(location.search);
+  var joinCode = params.get('join');
+
+  function makeQR(text){
+    var qr = qrcode(0, 'M');
+    qr.addData(text);
+    qr.make();
+    $('qrBox').innerHTML = qr.createTableTag({cellSize:4, margin:8});
+  }
+
+  /* ---------- Receiver mode: James opened ?join=CODE ---------- */
+  function startReceiver(code){
+    $('sendBox').classList.add('hidden');
+    $('codeRow').classList.add('hidden');
+    $('recvBox').classList.remove('hidden');
+    var status = $('recvStatus'), prog = $('recvProg');
+    var peer = new Peer();
+    var chunks = [], received = 0, meta = null;
+    peer.on('open', function(){
+      status.textContent = 'Connecting to the sender…';
+      var conn = peer.connect(PREFIX + code, {reliable:true});
+      conn.on('open', function(){ status.textContent = 'Connected. Waiting for the file…'; });
+      conn.on('data', function(data){
+        if (data && data.__meta){
+          meta = data; chunks = []; received = 0;
+          status.textContent = 'Receiving: ' + meta.name;
+        } else if (data && data.__done){
+          var blob = new Blob(chunks, {type: meta ? meta.type : 'application/octet-stream'});
+          var a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = meta ? meta.name : 'file';
+          document.body.appendChild(a); a.click(); a.remove();
+          status.textContent = '✅ Saved: ' + (meta ? meta.name : 'file');
+          prog.textContent = '';
+        } else {
+          chunks.push(data);
+          received += data.byteLength || data.size || 0;
+          if (meta) prog.textContent = Math.round(received / meta.size * 100) + '% of ' + meta.name;
+        }
+      });
+      conn.on('error', function(){ status.textContent = 'Connection error — ask them to restart the transfer.'; });
+    });
+    peer.on('error', function(err){
+      status.textContent = 'Could not connect (' + err.type + '). Check the code and try again.';
+    });
+  }
+
+  if (joinCode){ startReceiver(joinCode); }
+
+  $('joinBtn').addEventListener('click', function(){
+    var code = $('codeInput').value.trim();
+    if (code) startReceiver(code);
+  });
+
+  /* ---------- Sender mode: visitor starts a transfer ---------- */
+  $('startBtn').addEventListener('click', function(){
+    $('startBtn').classList.add('hidden');
+    $('sendPanel').classList.remove('hidden');
+    var code = String(Math.floor(100000 + Math.random() * 900000));
+    $('codeTxt').textContent = code;
+    makeQR(location.origin + location.pathname + '?join=' + code);
+    var status = $('sendStatus');
+    var peer = new Peer(PREFIX + code);
+    var activeConn = null;
+    peer.on('open', function(){ status.textContent = 'Waiting for James to connect…'; });
+    peer.on('connection', function(conn){
+      activeConn = conn;
+      conn.on('open', function(){
+        status.textContent = '✅ James connected. Pick your file:';
+        $('pickRow').classList.remove('hidden');
+      });
+      conn.on('close', function(){ status.textContent = 'Connection closed.'; });
+    });
+    peer.on('error', function(err){
+      status.textContent = 'Something went wrong (' + err.type + '). Tap to retry.';
+      $('startBtn').classList.remove('hidden');
+      $('sendPanel').classList.add('hidden');
+    });
+    $('fileInput').addEventListener('change', function(ev){
+      var file = ev.target.files[0];
+      if (!file || !activeConn) return;
+      var prog = $('progTxt');
+      activeConn.send({__meta:true, name:file.name, size:file.size, type:file.type});
+      var CHUNK = 16384, offset = 0;
+      var reader = new FileReader();
+      reader.onload = function(e){
+        activeConn.send(e.target.result);
+        offset += e.target.result.byteLength;
+        prog.textContent = 'Sending ' + file.name + ' — ' + Math.round(offset / file.size * 100) + '%';
+        if (offset < file.size){ readNext(); }
+        else {
+          activeConn.send({__done:true});
+          prog.textContent = '✅ Sent: ' + file.name;
+          status.textContent = 'Done — James has your file.';
+        }
+      };
+      function readNext(){
+        var slice = file.slice(offset, offset + CHUNK);
+        reader.readAsArrayBuffer(slice);
+      }
+      readNext();
+    });
+  });
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,11 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Maya Carter
+ORG:Harbour & Pine Realty
+TITLE:Realtor
+TEL;TYPE=CELL:+19025550148
+EMAIL:maya.carter@example.com
+URL:https://ocean1547-ui.github.io/automation-portfolio/card/sample.html
+ADR:;;1209 Marginal Rd;Halifax;NS;B3H 4P8;Canada
+NOTE:Sample profile — fictional details.
+END:VCARD
